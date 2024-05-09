@@ -1,0 +1,3 @@
+[submodule "extern/prefabricated-cmake"]
+	path = extern/prefabricated-cmake
+	url = https://github.com/jbrd/prefabricated-cmake.git
