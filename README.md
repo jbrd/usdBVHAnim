@@ -16,12 +16,14 @@ Bla.
 * Run the tests with: `ctest -C Debug ./`
 * Format source code with: `cmake --build ./ --target format`
 
-### Installing to a Local Deployment
+### Testing Locally
 
 * Specify your deployment directory when generating project files: `cmake -DCMAKE_INSTALL_PREFIX=./deploy ../`
 * Build the project in Release mode with: `cmake --build ./ --config Release`
 * Build the documentation: `cmake --build ./ --target docs`
 * Install to a local deployment `cmake --build ./ --target install`
+* Add your local deployment to `PXR_PLUGINPATH_NAME`, e.g: `set PXR_PLUGINPATH_NAME=%cd%/deploy/bin`
+* Run usdview to open a .bvh file
 
 
 ## Toolchain Requirements

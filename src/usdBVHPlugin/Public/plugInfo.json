@@ -1,0 +1,27 @@
+{
+  "Plugins": [
+    {
+      "Info": {
+        "Types": {
+          "usdBVHPlugin::BvhFileFormat": {
+            "bases": [
+              "SdfFileFormat"
+            ],
+            "displayName": "BVH File Format",
+            "extensions": [
+              "bvh"
+            ],
+            "formatId": "bvh",
+            "primary": true,
+            "target": "usd"
+          }
+        }
+      },
+      "LibraryPath": "usdBVHPlugin.dll",
+      "Name": "usdBVH",
+      "ResourcePath": "./",
+      "Root": "./",
+      "Type": "library"
+    }
+  ]
+}
