@@ -1,16 +1,24 @@
 cmake_minimum_required(VERSION 3.28)
 include(extern/prefabricated-cmake/main.cmake)
 project(
-	"usdBVH"
+	"usdBVHAnim"
 	VERSION "1.0.0"
 )
 set(PROJECT_AUTHOR "James Bird")
 
 # Find external dependencies
 find_package(Boost)
-find_package(pxr)
+find_package(pxr REQUIRED)
 
 # Set global compile options
+add_compile_definitions(_USE_MATH_DEFINES)
+add_compile_definitions(
+    TBB_USE_ASSERT
+    TBB_USE_THREADING_TOOLS
+    TBB_SUPPRESS_DEPRECATED_MESSAGES
+    TBB_USE_PERFORMANCE_WARNINGS
+)
+
 if (WIN32)
 	add_compile_options(/wd4003)
 	# Necessary to ensure that MSVC does not optimize away the SdfFileFormat registration callback
@@ -25,9 +33,6 @@ endif()
 # Setup common properties accross all targets
 function(apply_common_target_properties TARGET)
 	set_target_properties(${TARGET} PROPERTIES CXX_STANDARD 17 CXX_STANDARD_REQUIRED true)
-endfunction()
-
-function(apply_common_dependencies TARGET)
 	target_include_directories(${TARGET} SYSTEM PRIVATE ${PXR_INCLUDE_DIRS} ${Boost_INCLUDE_DIRS})
 	target_link_directories(${TARGET} PRIVATE ${PXR_LIBRARY_DIRS})
 	target_link_libraries(${TARGET} ${PXR_LIBRARIES})

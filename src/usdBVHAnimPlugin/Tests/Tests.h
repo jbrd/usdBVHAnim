@@ -1,5 +1,5 @@
 #pragma once
-#include <stdio.h>
+#include <cstdio>
 
 #define BEGIN_TEST_FIXTURE(name) \
     void Fixture_##name() \

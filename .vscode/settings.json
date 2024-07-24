@@ -1,0 +1,16 @@
+{
+    "cmake.configureOnOpen": false,
+    "terminal.integrated.profiles.windows": {
+        "PowerShell": {
+            "source": "PowerShell",
+            "icon": "terminal-powershell",
+            "args": [
+                "-ExecutionPolicy",
+                "ByPass",
+                "-NoExit",
+                "-File",
+                ".vscode/init.ps1"
+            ]
+        }
+    },
+}

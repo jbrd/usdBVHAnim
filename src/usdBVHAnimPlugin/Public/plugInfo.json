@@ -7,7 +7,7 @@
             "bases": [
               "SdfFileFormat"
             ],
-            "displayName": "BVH File Format",
+            "displayName": "BVH Animation File Format",
             "extensions": [
               "bvh"
             ],
@@ -17,8 +17,8 @@
           }
         }
       },
-      "LibraryPath": "usdBVHPlugin.dll",
-      "Name": "usdBVH",
+      "LibraryPath": "usdBVHAnimPlugin.dll",
+      "Name": "usdBVHAnim",
       "ResourcePath": "./",
       "Root": "./",
       "Type": "library"

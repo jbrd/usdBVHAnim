@@ -1,5 +1,5 @@
-usdBVHPlugin
-============
+usdBVHAnimPlugin
+================
 
 TODO
 
@@ -7,5 +7,5 @@ Doxygen Documentation
 ---------------------
 
 .. doxygenindex::
-   :project: usdBVHPlugin
+   :project: usdBVHAnimPlugin
 
