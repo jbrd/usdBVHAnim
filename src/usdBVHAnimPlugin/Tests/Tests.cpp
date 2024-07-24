@@ -1,5 +1,5 @@
-#include "ParseBVH.h"
 #include "Tests.h"
+#include "ParseBVH.h"
 
 int main(int, char*[])
 {

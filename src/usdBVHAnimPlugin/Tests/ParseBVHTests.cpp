@@ -5,8 +5,8 @@
 using namespace usdBVHPlugin;
 
 // See 'data/test_bvh.*' for data source files
-static const char s_TestBVH[] = 
-R"(HIERARCHY
+static const char s_TestBVH[] =
+    R"(HIERARCHY
 ROOT Root
 {
 	OFFSET 0.000000 0.000000 0.000000
@@ -47,81 +47,81 @@ Frame Time: 0.041667
 
 BEGIN_TEST_FIXTURE(ParseBVHTests)
 
-    TEST(ParseBVH_ParseTest)
-    {
-        float constexpr c_Tolerance = 1e-6f;
+TEST(ParseBVH_ParseTest)
+{
+    float constexpr c_Tolerance = 1e-6f;
 
-        // Parse the BVH data and ensure it is successful
-        std::istringstream stream(s_TestBVH, std::ios::in | std::ios::binary);
-        usdBVHPlugin::BVHDocument document;
-        bool result = usdBVHPlugin::ParseBVH(stream, document);
-        TEST_REQUIRE(result == true);
+    // Parse the BVH data and ensure it is successful
+    std::istringstream stream(s_TestBVH, std::ios::in | std::ios::binary);
+    usdBVHPlugin::BVHDocument document;
+    bool result = usdBVHPlugin::ParseBVH(stream, document);
+    TEST_REQUIRE(result == true);
 
-        // Validate the parsed document
-        size_t constexpr c_NumJoints = 2;
-        size_t constexpr c_NumFrames = 20;
-        TEST_REQUIRE(document.m_JointNames.size() == c_NumJoints);
-        TEST_REQUIRE(document.m_JointNames[0] == "Root");
-        TEST_REQUIRE(document.m_JointNames[1] == "Foo");
-        TEST_REQUIRE(document.m_JointParents.size() == c_NumJoints);
-        TEST_REQUIRE(document.m_JointParents[0] == -1);
-        TEST_REQUIRE(document.m_JointParents[1] == 0);
-        TEST_REQUIRE(document.m_JointOffsets.size() == c_NumJoints);
-        TEST_REQUIRE(std::fabs(document.m_JointOffsets[0].m_Translation[0] - 0.0) < c_Tolerance);
-        TEST_REQUIRE(std::fabs(document.m_JointOffsets[0].m_Translation[1] - 0.0) < c_Tolerance);
-        TEST_REQUIRE(std::fabs(document.m_JointOffsets[0].m_Translation[2] - 0.0) < c_Tolerance);
-        TEST_REQUIRE(std::fabs(document.m_JointOffsets[1].m_Translation[0] - 0.0) < c_Tolerance);
-        TEST_REQUIRE(std::fabs(document.m_JointOffsets[1].m_Translation[1] - 0.0) < c_Tolerance);
-        TEST_REQUIRE(std::fabs(document.m_JointOffsets[1].m_Translation[2] - 1.0) < c_Tolerance);
-        TEST_REQUIRE(document.m_JointNumChannels.size() == c_NumJoints);
-        TEST_REQUIRE(document.m_JointNumChannels[0] == 6);
-        TEST_REQUIRE(document.m_JointNumChannels[1] == 3);
-        TEST_REQUIRE(document.m_JointChannels.size() == c_NumJoints);
-        TEST_REQUIRE(((document.m_JointChannels[0] >> 0) & BVHChannel::Mask) == BVHChannel::XPosition);
-        TEST_REQUIRE(((document.m_JointChannels[0] >> 3) & BVHChannel::Mask) == BVHChannel::YPosition);
-        TEST_REQUIRE(((document.m_JointChannels[0] >> 6) & BVHChannel::Mask) == BVHChannel::ZPosition);
-        TEST_REQUIRE(((document.m_JointChannels[0] >> 9) & BVHChannel::Mask) == BVHChannel::XRotation);
-        TEST_REQUIRE(((document.m_JointChannels[0] >> 12) & BVHChannel::Mask) == BVHChannel::YRotation);
-        TEST_REQUIRE(((document.m_JointChannels[0] >> 15) & BVHChannel::Mask) == BVHChannel::ZRotation);
-        TEST_REQUIRE(((document.m_JointChannels[0] >> 18) & BVHChannel::Mask) == BVHChannel::None);
-        TEST_REQUIRE(((document.m_JointChannels[1] >> 0) & BVHChannel::Mask) == BVHChannel::XRotation);
-        TEST_REQUIRE(((document.m_JointChannels[1] >> 3) & BVHChannel::Mask) == BVHChannel::YRotation);
-        TEST_REQUIRE(((document.m_JointChannels[1] >> 6) & BVHChannel::Mask) == BVHChannel::ZRotation);
-        TEST_REQUIRE(((document.m_JointChannels[1] >> 9) & BVHChannel::Mask) == BVHChannel::None);
-        TEST_REQUIRE(std::fabs(document.m_FrameTime - 0.041667) < c_Tolerance);
-        TEST_REQUIRE(document.m_FrameTransforms.size() == c_NumFrames * c_NumJoints);
+    // Validate the parsed document
+    size_t constexpr c_NumJoints = 2;
+    size_t constexpr c_NumFrames = 20;
+    TEST_REQUIRE(document.m_JointNames.size() == c_NumJoints);
+    TEST_REQUIRE(document.m_JointNames[0] == "Root");
+    TEST_REQUIRE(document.m_JointNames[1] == "Foo");
+    TEST_REQUIRE(document.m_JointParents.size() == c_NumJoints);
+    TEST_REQUIRE(document.m_JointParents[0] == -1);
+    TEST_REQUIRE(document.m_JointParents[1] == 0);
+    TEST_REQUIRE(document.m_JointOffsets.size() == c_NumJoints);
+    TEST_REQUIRE(std::fabs(document.m_JointOffsets[0].m_Translation[0] - 0.0) < c_Tolerance);
+    TEST_REQUIRE(std::fabs(document.m_JointOffsets[0].m_Translation[1] - 0.0) < c_Tolerance);
+    TEST_REQUIRE(std::fabs(document.m_JointOffsets[0].m_Translation[2] - 0.0) < c_Tolerance);
+    TEST_REQUIRE(std::fabs(document.m_JointOffsets[1].m_Translation[0] - 0.0) < c_Tolerance);
+    TEST_REQUIRE(std::fabs(document.m_JointOffsets[1].m_Translation[1] - 0.0) < c_Tolerance);
+    TEST_REQUIRE(std::fabs(document.m_JointOffsets[1].m_Translation[2] - 1.0) < c_Tolerance);
+    TEST_REQUIRE(document.m_JointNumChannels.size() == c_NumJoints);
+    TEST_REQUIRE(document.m_JointNumChannels[0] == 6);
+    TEST_REQUIRE(document.m_JointNumChannels[1] == 3);
+    TEST_REQUIRE(document.m_JointChannels.size() == c_NumJoints);
+    TEST_REQUIRE(((document.m_JointChannels[0] >> 0) & BVHChannel::Mask) == BVHChannel::XPosition);
+    TEST_REQUIRE(((document.m_JointChannels[0] >> 3) & BVHChannel::Mask) == BVHChannel::YPosition);
+    TEST_REQUIRE(((document.m_JointChannels[0] >> 6) & BVHChannel::Mask) == BVHChannel::ZPosition);
+    TEST_REQUIRE(((document.m_JointChannels[0] >> 9) & BVHChannel::Mask) == BVHChannel::XRotation);
+    TEST_REQUIRE(((document.m_JointChannels[0] >> 12) & BVHChannel::Mask) == BVHChannel::YRotation);
+    TEST_REQUIRE(((document.m_JointChannels[0] >> 15) & BVHChannel::Mask) == BVHChannel::ZRotation);
+    TEST_REQUIRE(((document.m_JointChannels[0] >> 18) & BVHChannel::Mask) == BVHChannel::None);
+    TEST_REQUIRE(((document.m_JointChannels[1] >> 0) & BVHChannel::Mask) == BVHChannel::XRotation);
+    TEST_REQUIRE(((document.m_JointChannels[1] >> 3) & BVHChannel::Mask) == BVHChannel::YRotation);
+    TEST_REQUIRE(((document.m_JointChannels[1] >> 6) & BVHChannel::Mask) == BVHChannel::ZRotation);
+    TEST_REQUIRE(((document.m_JointChannels[1] >> 9) & BVHChannel::Mask) == BVHChannel::None);
+    TEST_REQUIRE(std::fabs(document.m_FrameTime - 0.041667) < c_Tolerance);
+    TEST_REQUIRE(document.m_FrameTransforms.size() == c_NumFrames * c_NumJoints);
 
-        // Validate first frame bone transforms
-        TEST_REQUIRE(std::fabs(document.m_FrameTransforms[0].m_Translation[0] - 0.0) < c_Tolerance);
-        TEST_REQUIRE(std::fabs(document.m_FrameTransforms[0].m_Translation[1] - 0.0) < c_Tolerance);
-        TEST_REQUIRE(std::fabs(document.m_FrameTransforms[0].m_Translation[2] - 0.0) < c_Tolerance);
-        TEST_REQUIRE(std::fabs(document.m_FrameTransforms[0].m_RotationQuat[0] - 0.0) < c_Tolerance);
-        TEST_REQUIRE(std::fabs(document.m_FrameTransforms[0].m_RotationQuat[1] - 0.0) < c_Tolerance);
-        TEST_REQUIRE(std::fabs(document.m_FrameTransforms[0].m_RotationQuat[2] - 0.0) < c_Tolerance);
-        TEST_REQUIRE(std::fabs(document.m_FrameTransforms[0].m_RotationQuat[3] - 1.0) < c_Tolerance);
-        TEST_REQUIRE(std::fabs(document.m_FrameTransforms[1].m_Translation[0] - 0.0) < c_Tolerance);
-        TEST_REQUIRE(std::fabs(document.m_FrameTransforms[1].m_Translation[1] - 0.0) < c_Tolerance);
-        TEST_REQUIRE(std::fabs(document.m_FrameTransforms[1].m_Translation[2] - 1.0) < c_Tolerance);
-        TEST_REQUIRE(std::fabs(document.m_FrameTransforms[1].m_RotationQuat[0] - 0.0) < c_Tolerance);
-        TEST_REQUIRE(std::fabs(document.m_FrameTransforms[1].m_RotationQuat[1] - 0.0) < c_Tolerance);
-        TEST_REQUIRE(std::fabs(document.m_FrameTransforms[1].m_RotationQuat[2] - 0.0) < c_Tolerance);
-        TEST_REQUIRE(std::fabs(document.m_FrameTransforms[1].m_RotationQuat[3] - 1.0) < c_Tolerance);
+    // Validate first frame bone transforms
+    TEST_REQUIRE(std::fabs(document.m_FrameTransforms[0].m_Translation[0] - 0.0) < c_Tolerance);
+    TEST_REQUIRE(std::fabs(document.m_FrameTransforms[0].m_Translation[1] - 0.0) < c_Tolerance);
+    TEST_REQUIRE(std::fabs(document.m_FrameTransforms[0].m_Translation[2] - 0.0) < c_Tolerance);
+    TEST_REQUIRE(std::fabs(document.m_FrameTransforms[0].m_RotationQuat[0] - 0.0) < c_Tolerance);
+    TEST_REQUIRE(std::fabs(document.m_FrameTransforms[0].m_RotationQuat[1] - 0.0) < c_Tolerance);
+    TEST_REQUIRE(std::fabs(document.m_FrameTransforms[0].m_RotationQuat[2] - 0.0) < c_Tolerance);
+    TEST_REQUIRE(std::fabs(document.m_FrameTransforms[0].m_RotationQuat[3] - 1.0) < c_Tolerance);
+    TEST_REQUIRE(std::fabs(document.m_FrameTransforms[1].m_Translation[0] - 0.0) < c_Tolerance);
+    TEST_REQUIRE(std::fabs(document.m_FrameTransforms[1].m_Translation[1] - 0.0) < c_Tolerance);
+    TEST_REQUIRE(std::fabs(document.m_FrameTransforms[1].m_Translation[2] - 1.0) < c_Tolerance);
+    TEST_REQUIRE(std::fabs(document.m_FrameTransforms[1].m_RotationQuat[0] - 0.0) < c_Tolerance);
+    TEST_REQUIRE(std::fabs(document.m_FrameTransforms[1].m_RotationQuat[1] - 0.0) < c_Tolerance);
+    TEST_REQUIRE(std::fabs(document.m_FrameTransforms[1].m_RotationQuat[2] - 0.0) < c_Tolerance);
+    TEST_REQUIRE(std::fabs(document.m_FrameTransforms[1].m_RotationQuat[3] - 1.0) < c_Tolerance);
 
-        // Validate last frame bone transforms
-        TEST_REQUIRE(std::fabs(document.m_FrameTransforms[19 * 2 + 0].m_Translation[0] - 0.0) < c_Tolerance);
-        TEST_REQUIRE(std::fabs(document.m_FrameTransforms[19 * 2 + 0].m_Translation[1] - 1.0) < c_Tolerance);
-        TEST_REQUIRE(std::fabs(document.m_FrameTransforms[19 * 2 + 0].m_Translation[2] - 0.0) < c_Tolerance);
-        TEST_REQUIRE(std::fabs(document.m_FrameTransforms[19 * 2 + 0].m_RotationQuat[0] - std::sin(M_PI * 0.25f)) < c_Tolerance);
-        TEST_REQUIRE(std::fabs(document.m_FrameTransforms[19 * 2 + 0].m_RotationQuat[1] - 0.0) < c_Tolerance);
-        TEST_REQUIRE(std::fabs(document.m_FrameTransforms[19 * 2 + 0].m_RotationQuat[2] - 0.0) < c_Tolerance);
-        TEST_REQUIRE(std::fabs(document.m_FrameTransforms[19 * 2 + 0].m_RotationQuat[3] - std::cos(M_PI * 0.25f)) < c_Tolerance);
-        TEST_REQUIRE(std::fabs(document.m_FrameTransforms[19 * 2 + 1].m_Translation[0] - 0.0) < c_Tolerance);
-        TEST_REQUIRE(std::fabs(document.m_FrameTransforms[19 * 2 + 1].m_Translation[1] - 0.0) < c_Tolerance);
-        TEST_REQUIRE(std::fabs(document.m_FrameTransforms[19 * 2 + 1].m_Translation[2] - 1.0) < c_Tolerance);
-        TEST_REQUIRE(std::fabs(document.m_FrameTransforms[19 * 2 + 1].m_RotationQuat[0] - 0.0) < c_Tolerance);
-        TEST_REQUIRE(std::fabs(document.m_FrameTransforms[19 * 2 + 1].m_RotationQuat[1] - std::sin(M_PI * 0.25f)) < c_Tolerance);
-        TEST_REQUIRE(std::fabs(document.m_FrameTransforms[19 * 2 + 1].m_RotationQuat[2] - 0.0) < c_Tolerance);
-        TEST_REQUIRE(std::fabs(document.m_FrameTransforms[19 * 2 + 1].m_RotationQuat[3] - std::cos(M_PI * 0.25f)) < c_Tolerance);
-    }
+    // Validate last frame bone transforms
+    TEST_REQUIRE(std::fabs(document.m_FrameTransforms[19 * 2 + 0].m_Translation[0] - 0.0) < c_Tolerance);
+    TEST_REQUIRE(std::fabs(document.m_FrameTransforms[19 * 2 + 0].m_Translation[1] - 1.0) < c_Tolerance);
+    TEST_REQUIRE(std::fabs(document.m_FrameTransforms[19 * 2 + 0].m_Translation[2] - 0.0) < c_Tolerance);
+    TEST_REQUIRE(std::fabs(document.m_FrameTransforms[19 * 2 + 0].m_RotationQuat[0] - std::sin(M_PI * 0.25f)) < c_Tolerance);
+    TEST_REQUIRE(std::fabs(document.m_FrameTransforms[19 * 2 + 0].m_RotationQuat[1] - 0.0) < c_Tolerance);
+    TEST_REQUIRE(std::fabs(document.m_FrameTransforms[19 * 2 + 0].m_RotationQuat[2] - 0.0) < c_Tolerance);
+    TEST_REQUIRE(std::fabs(document.m_FrameTransforms[19 * 2 + 0].m_RotationQuat[3] - std::cos(M_PI * 0.25f)) < c_Tolerance);
+    TEST_REQUIRE(std::fabs(document.m_FrameTransforms[19 * 2 + 1].m_Translation[0] - 0.0) < c_Tolerance);
+    TEST_REQUIRE(std::fabs(document.m_FrameTransforms[19 * 2 + 1].m_Translation[1] - 0.0) < c_Tolerance);
+    TEST_REQUIRE(std::fabs(document.m_FrameTransforms[19 * 2 + 1].m_Translation[2] - 1.0) < c_Tolerance);
+    TEST_REQUIRE(std::fabs(document.m_FrameTransforms[19 * 2 + 1].m_RotationQuat[0] - 0.0) < c_Tolerance);
+    TEST_REQUIRE(std::fabs(document.m_FrameTransforms[19 * 2 + 1].m_RotationQuat[1] - std::sin(M_PI * 0.25f)) < c_Tolerance);
+    TEST_REQUIRE(std::fabs(document.m_FrameTransforms[19 * 2 + 1].m_RotationQuat[2] - 0.0) < c_Tolerance);
+    TEST_REQUIRE(std::fabs(document.m_FrameTransforms[19 * 2 + 1].m_RotationQuat[3] - std::cos(M_PI * 0.25f)) < c_Tolerance);
+}
 
 END_TEST_FIXTURE()
