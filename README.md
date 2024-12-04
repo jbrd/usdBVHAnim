@@ -23,7 +23,8 @@ Likewise, to build this plugin against a Debug build of OpenUSD, please use `--c
 * Build the project with: `cmake --build ./ -- config Release`
 * Build the documentation with: `cmake --build ./ --config Release --target docs`
 * Run the tests with: `ctest -C Release ./`
-* Format source code with: `cmake --build ./ --target format`
+* Validate source code formatting with: `cmake --build ./ --target format-check`
+* Automatically format source code with: `cmake --build ./ --target format`
 
 ### Testing Locally
 
@@ -39,7 +40,7 @@ Likewise, to build this plugin against a Debug build of OpenUSD, please use `--c
 
 ## Toolchain Requirements
 
-### Linux
+### Linux and MacOS
 
 * An OpenUSD Installation (see version compatibility table below)
 * Git
@@ -70,9 +71,9 @@ Likewise, to build this plugin against a Debug build of OpenUSD, please use `--c
 
 ## Version Compatibility Table
 
-| Plugin Version      | OpenUSD Version      |
-|---------------------|----------------------|
-| 1.0.0               | 24.05                |
+| Plugin Version      | USD 24.11 |
+|---------------------|-----------|
+| 1.0.0               | ✅         |
 
 # Contributors
 

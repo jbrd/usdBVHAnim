@@ -8,6 +8,7 @@ set(PROJECT_AUTHOR "James Bird")
 
 # Find external dependencies
 find_package(Boost)
+find_package(OpenGL)
 find_package(pxr REQUIRED)
 
 # Set global compile options
@@ -33,7 +34,10 @@ endif()
 # Setup common properties accross all targets
 function(apply_common_target_properties TARGET)
 	set_target_properties(${TARGET} PROPERTIES CXX_STANDARD 17 CXX_STANDARD_REQUIRED true)
-	target_include_directories(${TARGET} SYSTEM PRIVATE ${PXR_INCLUDE_DIRS} ${Boost_INCLUDE_DIRS})
+	target_include_directories(${TARGET} SYSTEM PRIVATE ${PXR_INCLUDE_DIRS})
+	if(${Boost_FOUND})
+		target_include_directories(${TARGET} SYSTEM PRIVATE ${Boost_INCLUDE_DIRS})
+	endif()
 	target_link_directories(${TARGET} PRIVATE ${PXR_LIBRARY_DIRS})
 	target_link_libraries(${TARGET} ${PXR_LIBRARIES})
 endfunction()
