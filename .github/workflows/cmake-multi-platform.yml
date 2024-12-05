@@ -67,6 +67,8 @@ jobs:
 
     - name: Download USD release
       run: gh release download USD-${{ matrix.usd_version }}-Artifacts -p "usd-${{ matrix.usd_version }}-${{ matrix.os }}.zip" --repo https://github.com/adobe/USD-Fileformat-plugins/
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Unzip USD release (Windows)
       if: runner.os == 'Windows'
