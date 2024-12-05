@@ -66,7 +66,7 @@ jobs:
       run: pip3 install sphinx breathe sphinx-rtd-theme
 
     - name: Download USD release
-      run: gh release download USD-${{ matrix.usd_version }}-Artifacts -p "usd-${{ matrix.usd_version }}-${{ matrix.os }}.zip" --repo https://github.com/adobe/USD-Fileformat-plugins/
+      run: gh release download USD-${{ matrix.usd_version }}-Artifacts -p "usd-${{ matrix.usd_version }}-${{ matrix.os }}.zip" --repo adobe/USD-Fileformat-plugins
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
