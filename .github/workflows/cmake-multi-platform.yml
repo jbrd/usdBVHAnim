@@ -24,7 +24,7 @@ jobs:
         build_type: [Release]
         c_compiler: [clang]  # TODO: Test alternative compilers in the future (cl, gcc)
         python_version: [3.12]
-        usd_version: [24.11]
+        usd_version: [2411]
         include:
           - os: windows-2022
             c_compiler: "clang"
