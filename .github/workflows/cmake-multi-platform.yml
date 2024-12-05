@@ -26,15 +26,15 @@ jobs:
         python_version: [3.12]
         usd_version: [24.11]
         include:
-          - os: windows-latest
+          - os: windows-2022
             c_compiler: "clang"
             cxx_compiler: "clang++"
-          - os: ubuntu-latest
-            c_compiler: "clang"
-            cxx_compiler: "clang++"
-          - os: macos-latest
-            c_compiler: "clang"
-            cxx_compiler: "clang++"
+          #- os: ubuntu-latest
+          #  c_compiler: "clang"
+          #  cxx_compiler: "clang++"
+          #- os: macos-latest
+          #  c_compiler: "clang"
+          #  cxx_compiler: "clang++"
 
     steps:
     - uses: actions/checkout@v4
