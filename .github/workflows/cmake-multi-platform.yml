@@ -23,7 +23,7 @@ jobs:
         os: [windows-2022]
         build_type: [Release]
         c_compiler: [clang]  # TODO: Test alternative compilers in the future (cl, gcc)
-        python_version: [3.12]
+        python_version: [3.10.11]  # Has to match the version that was used to build USD
         usd_version: [2411]
         include:
           - os: windows-2022
