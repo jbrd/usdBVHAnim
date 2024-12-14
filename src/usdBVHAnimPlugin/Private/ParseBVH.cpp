@@ -10,12 +10,11 @@
         return false;      \
     }
 
-namespace {
-const char* const c_WS = " \t\r\n";
-const char* const c_AlphaNumeric = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-const char* const c_Double = "-0123456789.";
+static const char* const c_WS = " \t\r\n";
+static const char* const c_AlphaNumeric = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+static const char* const c_Double = "-0123456789.";
 
-void MultiplyQuat(double a[4], double const b[4])
+static void MultiplyQuat(double a[4], double const b[4])
 {
     double result[4];
     result[0] = a[3] * b[0] + a[0] * b[3] + a[1] * b[2] - a[2] * b[1];
@@ -28,7 +27,6 @@ void MultiplyQuat(double a[4], double const b[4])
     a[2] = result[2];
     a[3] = result[3];
 }
-} // namespace
 
 namespace usdBVHPlugin {
 Parse ParseDouble(Parse cursor, double& result)
