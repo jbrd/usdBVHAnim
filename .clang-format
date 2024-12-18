@@ -9,24 +9,28 @@ AlignConsecutiveAssignments:
   AcrossEmptyLines: false
   AcrossComments:  false
   AlignCompound:   false
+  AlignFunctionPointers: false
   PadOperators:    true
 AlignConsecutiveBitFields:
   Enabled:         false
   AcrossEmptyLines: false
   AcrossComments:  false
   AlignCompound:   false
+  AlignFunctionPointers: false
   PadOperators:    false
 AlignConsecutiveDeclarations:
   Enabled:         false
   AcrossEmptyLines: false
   AcrossComments:  false
   AlignCompound:   false
+  AlignFunctionPointers: false
   PadOperators:    false
 AlignConsecutiveMacros:
   Enabled:         false
   AcrossEmptyLines: false
   AcrossComments:  false
   AlignCompound:   false
+  AlignFunctionPointers: false
   PadOperators:    false
 AlignConsecutiveShortCaseStatements:
   Enabled:         false
@@ -40,8 +44,10 @@ AlignTrailingComments:
   OverEmptyLines:  0
 AllowAllArgumentsOnNextLine: true
 AllowAllParametersOfDeclarationOnNextLine: true
+AllowBreakBeforeNoexceptSpecifier: Never
 AllowShortBlocksOnASingleLine: Empty
 AllowShortCaseLabelsOnASingleLine: false
+AllowShortCompoundRequirementOnASingleLine: true
 AllowShortEnumsOnASingleLine: true
 AllowShortFunctionsOnASingleLine: All
 AllowShortIfStatementsOnASingleLine: Never
@@ -75,7 +81,8 @@ BraceWrapping:
   SplitEmptyFunction: true
   SplitEmptyRecord: true
   SplitEmptyNamespace: true
-BreakAfterAttributes: Never
+BreakAdjacentStringLiterals: true
+BreakAfterAttributes: Leave
 BreakAfterJavaFieldAnnotations: false
 BreakArrays:     true
 BreakBeforeBinaryOperators: All
@@ -160,6 +167,7 @@ PenaltyBreakBeforeFirstCallParameter: 19
 PenaltyBreakComment: 300
 PenaltyBreakFirstLessLess: 120
 PenaltyBreakOpenParenthesis: 0
+PenaltyBreakScopeResolution: 500
 PenaltyBreakString: 1000
 PenaltyBreakTemplateDeclaration: 10
 PenaltyExcessCharacter: 1000000
@@ -177,6 +185,7 @@ RequiresClausePosition: OwnLine
 RequiresExpressionIndentation: OuterScope
 SeparateDefinitionBlocks: Leave
 ShortNamespaceLines: 1
+SkipMacroDefinitionBody: false
 SortIncludes:    CaseSensitive
 SortJavaStaticImport: Before
 SortUsingDeclarations: LexicographicNumeric
@@ -198,6 +207,7 @@ SpaceBeforeParensOptions:
   AfterFunctionDeclarationName: false
   AfterIfMacros:   true
   AfterOverloadedOperator: false
+  AfterPlacementOperator: true
   AfterRequiresInClause: false
   AfterRequiresInExpression: false
   BeforeNonEmptyParentheses: false
