@@ -42,6 +42,12 @@ jobs:
         submodules: recursive
         token: ${{ secrets.SUBMODULE_KEY }}
 
+    - name: Set up Visual Studio (Windows)
+      if: runner.os == 'Windows'
+      uses: seanmiddleditch/gha-setup-vsdevenv@v4
+      with:
+        components: Microsoft.VisualStudio.Component.VC.Llvm.Clang;Microsoft.VisualStudio.Component.VC.Llvm.ClangToolset
+
     - name: Set up Python ${{ matrix.python_version }}
       uses: actions/setup-python@v5
       with:
