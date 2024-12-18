@@ -10,12 +10,11 @@
         return false;      \
     }
 
-namespace {
-const char* const c_WS = " \t\r\n";
-const char* const c_AlphaNumeric = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-const char* const c_Double = "-0123456789.";
+static const char* const c_WS = " \t\r\n";
+static const char* const c_AlphaNumeric = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+static const char* const c_Double = "-0123456789.";
 
-void MultiplyQuat(double a[4], double const b[4])
+static void MultiplyQuat(double a[4], double const b[4])
 {
     double result[4];
     result[0] = a[3] * b[0] + a[0] * b[3] + a[1] * b[2] - a[2] * b[1];
@@ -28,7 +27,6 @@ void MultiplyQuat(double a[4], double const b[4])
     a[2] = result[2];
     a[3] = result[3];
 }
-} // namespace
 
 namespace usdBVHPlugin {
 Parse ParseDouble(Parse cursor, double& result)
@@ -91,31 +89,26 @@ Parse ParseJointChannels(Parse cursor, unsigned int& numChannels, uint32_t& chan
             token,
             [&](Parse const& cursor) {
                 return cursor.AnyOf({ [&](Parse const& cursor) { return cursor.String("Xposition"); },
-                                      [&](Parse const& cursor) { return cursor.String("Yposition"); },
-                                      [&](Parse const& cursor) { return cursor.String("Zposition"); },
-                                      [&](Parse const& cursor) { return cursor.String("Xrotation"); },
-                                      [&](Parse const& cursor) { return cursor.String("Yrotation"); },
-                                      [&](Parse const& cursor) { return cursor.String("Zrotation"); } });
+                    [&](Parse const& cursor) { return cursor.String("Yposition"); },
+                    [&](Parse const& cursor) { return cursor.String("Zposition"); },
+                    [&](Parse const& cursor) { return cursor.String("Xrotation"); },
+                    [&](Parse const& cursor) { return cursor.String("Yrotation"); },
+                    [&](Parse const& cursor) { return cursor.String("Zrotation"); } });
             });
         if (!cursor) {
             return cursor;
         }
         if (token == "Xposition") {
             channels |= static_cast<unsigned int>(BVHChannel::XPosition) << (3 * i);
-        }
-        else if (token == "Yposition") {
+        } else if (token == "Yposition") {
             channels |= static_cast<unsigned int>(BVHChannel::YPosition) << (3 * i);
-        }
-        else if (token == "Zposition") {
+        } else if (token == "Zposition") {
             channels |= static_cast<unsigned int>(BVHChannel::ZPosition) << (3 * i);
-        }
-        else if (token == "Xrotation") {
+        } else if (token == "Xrotation") {
             channels |= static_cast<unsigned int>(BVHChannel::XRotation) << (3 * i);
-        }
-        else if (token == "Yrotation") {
+        } else if (token == "Yrotation") {
             channels |= static_cast<unsigned int>(BVHChannel::YRotation) << (3 * i);
-        }
-        else if (token == "Zrotation") {
+        } else if (token == "Zrotation") {
             channels |= static_cast<unsigned int>(BVHChannel::ZRotation) << (3 * i);
         }
     }
@@ -133,8 +126,7 @@ Parse ParseJointHierarchy(Parse cursor, size_t currentJointIndex, BVHDocument& d
         BVHOffset offset;
         cursor = ParseJointOffset(next, offset);
         cursor = cursor.Char('}').Skip(c_WS);
-    }
-    else {
+    } else {
         cursor = cursor.AtLeast(0, [&](Parse const& cursor) {
             std::string childName;
             Parse result = cursor
@@ -238,7 +230,7 @@ bool ParseBVH(std::istream& stream, BVHDocument& result)
     result.m_JointNumChannels.push_back(0);
     result.m_JointChannels.push_back(0);
 
-    Parse cursor = Parse{ contents.data(), contents.data() + contents.size() }
+    Parse cursor = Parse { contents.data(), contents.data() + contents.size() }
                        .String("HIERARCHY")
                        .Skip(c_WS)
                        .String("ROOT")

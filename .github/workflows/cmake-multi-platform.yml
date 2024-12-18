@@ -2,9 +2,9 @@ name: CMake on multiple platforms
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "master" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "master" ]
 
 jobs:
   build:
@@ -23,21 +23,24 @@ jobs:
         os: [windows-2022]
         build_type: [Release]
         c_compiler: [clang]  # TODO: Test alternative compilers in the future (cl, gcc)
-        python_version: [3.12]
-        usd_version: [24.11]
+        python_version: [3.10.11]  # Has to match the version that was used to build USD
+        usd_version: [2411]
         include:
-          - os: windows-latest
+          - os: windows-2022
             c_compiler: "clang"
             cxx_compiler: "clang++"
-          - os: ubuntu-latest
-            c_compiler: "clang"
-            cxx_compiler: "clang++"
-          - os: macos-latest
-            c_compiler: "clang"
-            cxx_compiler: "clang++"
+          #- os: ubuntu-latest
+          #  c_compiler: "clang"
+          #  cxx_compiler: "clang++"
+          #- os: macos-latest
+          #  c_compiler: "clang"
+          #  cxx_compiler: "clang++"
 
     steps:
     - uses: actions/checkout@v4
+      with:
+        submodules: recursive
+        token: ${{ secrets.SUBMODULE_KEY }}
 
     - name: Set up Python ${{ matrix.python_version }}
       uses: actions/setup-python@v5
@@ -49,8 +52,8 @@ jobs:
       id: strings
       shell: bash
       run: |
-        echo "build-output-dir=${{ github.workspace }}/example/build" >> "$GITHUB_OUTPUT"
-        echo "build-install-dir=${{ github.workspace }}/example/build/install" >> "$GITHUB_OUTPUT"
+        echo "build-output-dir=${{ github.workspace }}/build" >> "$GITHUB_OUTPUT"
+        echo "build-install-dir=${{ github.workspace }}/build/install" >> "$GITHUB_OUTPUT"
 
     - name: Install Dependencies (Linux)
       if: runner.os == 'Linux'
@@ -66,7 +69,9 @@ jobs:
       run: pip3 install sphinx breathe sphinx-rtd-theme
 
     - name: Download USD release
-      run: gh release download USD-${{ matrix.usd_version }}-Artifacts -p "usd-${{ matrix.usd_version }}-${{ matrix.os }}.zip" --repo https://github.com/adobe/USD-Fileformat-plugins/
+      run: gh release download USD-${{ matrix.usd_version }}-Artifacts -p "usd-${{ matrix.usd_version }}-${{ matrix.os }}.zip" --repo adobe/USD-Fileformat-plugins
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Unzip USD release (Windows)
       if: runner.os == 'Windows'
@@ -75,6 +80,35 @@ jobs:
     - name: Unzip USD release (Unix)
       if: runner.os != 'Windows'
       run: unzip -q usd-${{ matrix.usd_version }}-${{ matrix.os }}.zip -d usd_build
+
+    - name: Set Environment Variables
+      shell: bash
+      run: |
+        if [ "${{ runner.os }}" == "Windows" ]; then
+          echo "${PYTHON_PATH}" >> "$GITHUB_PATH"
+          echo "${{ github.workspace }}/usd_build/bin" >> "$GITHUB_PATH"
+          echo "${{ github.workspace }}/usd_build/lib" >> "$GITHUB_PATH"
+          echo "${{ github.workspace }}/usd_build/lib64" >> "$GITHUB_PATH"
+          echo "${{ github.workspace }}/usd_build/plugin/usd" >> "$GITHUB_PATH"
+          echo "${{ github.workspace }}/bin/bin" >> "$GITHUB_PATH"
+          echo "${{ github.workspace }}/bin/plugin/usd" >> "$GITHUB_PATH"
+          echo "PXR_PLUGINPATH_NAME=${{ github.workspace }}/bin/plugin/usd;${{ github.workspace }}/usd_build/plugin/usd" >> "$GITHUB_ENV"
+        else
+          # Concatenate paths for LD_LIBRARY_PATH
+          ldLibraryPath="${{ github.workspace }}/usd_build/bin:"
+          ldLibraryPath+="${{ github.workspace }}/usd_build/lib:"
+          ldLibraryPath+="${{ github.workspace }}/usd_build/lib64:"
+          ldLibraryPath+="${{ github.workspace }}/usd_build/plugin/usd:"
+          ldLibraryPath+="${{ github.workspace }}/bin/bin:"
+          ldLibraryPath+="${{ github.workspace }}/bin/lib:"
+          ldLibraryPath+="${{ github.workspace }}/bin/plugin/usd"
+          echo "LD_LIBRARY_PATH=$ldLibraryPath" >> "$GITHUB_ENV"
+          echo "PXR_PLUGINPATH_NAME=${{ github.workspace }}/bin/plugin/usd:${{ github.workspace }}/usd_build/plugin/usd" >> "$GITHUB_ENV"
+        fi
+        USD_BUILD_PATH="${{ github.workspace }}/usd_build"
+        USD_BUILD_PATH="${USD_BUILD_PATH//\\//}"
+        echo "USD_BUILD_PATH=$USD_BUILD_PATH" >> "$GITHUB_ENV"
+        echo "PYTHONPATH=${{ github.workspace }}/usd_build/lib/python:${PYTHONPATH}" >> "$GITHUB_ENV"
 
     - name: Configure CMake
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
@@ -85,7 +119,7 @@ jobs:
         -DCMAKE_C_COMPILER=${{ matrix.c_compiler }}
         -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
         -DCMAKE_INSTALL_PREFIX=${{ steps.strings.outputs.build-install-dir }}
-        -S ${{ github.workspace }}/example
+        -S ${{ github.workspace }}
 
     - name: Build
       working-directory: ${{ steps.strings.outputs.build-output-dir }}
@@ -96,7 +130,7 @@ jobs:
       working-directory: ${{ steps.strings.outputs.build-output-dir }}
       # Execute tests defined by the CMake configuration. Note that --build-config is needed because the default Windows generator is a multi-config generator (Visual Studio generator).
       # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
-      run: ctest --build-config ${{ matrix.build_type }}
+      run: ctest -VV --build-config ${{ matrix.build_type }}
 
     - name: Documentation
       working-directory: ${{ steps.strings.outputs.build-output-dir }}

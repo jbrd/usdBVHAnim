@@ -15,9 +15,9 @@ struct Parse {
     Parse Char(char value) const
     {
         if ((*this) && *m_Begin == value) {
-            return Parse{ m_Begin + 1, m_End };
+            return Parse { m_Begin + 1, m_End };
         }
-        return Parse{};
+        return Parse {};
     }
 
     Parse String(const char* str) const
@@ -70,8 +70,7 @@ struct Parse {
             Parse next = function(cursor);
             if (next) {
                 cursor = next;
-            }
-            else {
+            } else {
                 break;
             }
         }
@@ -89,8 +88,7 @@ struct Parse {
         if (next) {
             result = std::string(m_Begin, next.m_Begin - m_Begin);
             return next;
-        }
-        else {
+        } else {
             return {};
         }
     }
