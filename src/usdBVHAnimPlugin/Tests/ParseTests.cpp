@@ -181,7 +181,7 @@ TEST(Parse_AnyOf_Valid_On_FirstMatch)
     char const* stream = "ABC";
     Parse parse = { stream, stream + 3 };
     TEST_REQUIRE(parse.AnyOf({ [](Parse const& cursor) { return cursor.Char('A'); },
-                               [](Parse const& cursor) { return cursor.Char('X'); } }));
+        [](Parse const& cursor) { return cursor.Char('X'); } }));
 }
 
 TEST(Parse_AnyOf_Valid_On_SecondMatch)
@@ -189,7 +189,7 @@ TEST(Parse_AnyOf_Valid_On_SecondMatch)
     char const* stream = "ABC";
     Parse parse = { stream, stream + 3 };
     TEST_REQUIRE(parse.AnyOf({ [](Parse const& cursor) { return cursor.Char('X'); },
-                               [](Parse const& cursor) { return cursor.Char('A'); } }));
+        [](Parse const& cursor) { return cursor.Char('A'); } }));
 }
 
 TEST(Parse_AnyOf_NotValid_On_NoMatch)
@@ -197,7 +197,7 @@ TEST(Parse_AnyOf_NotValid_On_NoMatch)
     char const* stream = "ABC";
     Parse parse = { stream, stream + 3 };
     TEST_REQUIRE(!parse.AnyOf({ [](Parse const& cursor) { return cursor.Char('X'); },
-                                [](Parse const& cursor) { return cursor.Char('Y'); } }));
+        [](Parse const& cursor) { return cursor.Char('Y'); } }));
 }
 
 TEST(Parse_AnyOf_NotValid_On_EmptyMatches)
@@ -220,7 +220,7 @@ TEST(Parse_AnyOf_NotValid_On_InvalidCursor)
 {
     Parse parse;
     TEST_REQUIRE(!parse.AnyOf({ [](Parse const& cursor) { return cursor.Char('X'); },
-                                [](Parse const& cursor) { return cursor.Char('Y'); } }));
+        [](Parse const& cursor) { return cursor.Char('Y'); } }));
 }
 
 TEST(Parse_AtLeast_0_Valid_On_NoMatches)
