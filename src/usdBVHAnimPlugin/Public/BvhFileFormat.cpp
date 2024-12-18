@@ -55,10 +55,10 @@ TF_DEFINE_PUBLIC_TOKENS(
 
 BvhFileFormat::BvhFileFormat()
     : SdfFileFormat(
-        BvhFileFormatTokens->Id,
-        BvhFileFormatTokens->Version,
-        BvhFileFormatTokens->Target,
-        BvhFileFormatTokens->Extension)
+          BvhFileFormatTokens->Id,
+          BvhFileFormatTokens->Version,
+          BvhFileFormatTokens->Target,
+          BvhFileFormatTokens->Extension)
 {
 }
 
