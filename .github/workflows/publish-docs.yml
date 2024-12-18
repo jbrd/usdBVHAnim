@@ -57,13 +57,13 @@ jobs:
         run: pip3 install sphinx breathe sphinx-rtd-theme
   
       - name: Download USD release
-        run: gh release download USD-${{ steps.strings.outputs.usd_version }}-Artifacts -p "usd-${{ matrix.usd_version }}-${{ matrix.os }}.zip" --repo adobe/USD-Fileformat-plugins
+        run: gh release download USD-${{ steps.strings.outputs.usd-version }}-Artifacts -p "usd-${{ steps.strings.outputs.usd-version }}-windows-2022.zip" --repo adobe/USD-Fileformat-plugins
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   
       - name: Unzip USD release (Windows)
         if: runner.os == 'Windows'
-        run: Expand-Archive -Path "usd-${{ steps.strings.outputs.usd_version }}-windows-2022.zip" -DestinationPath usd_build -Force
+        run: Expand-Archive -Path "usd-${{ steps.strings.outputs.usd-version }}-windows-2022.zip" -DestinationPath usd_build -Force
 
       - name: Set Environment Variables
         shell: bash
