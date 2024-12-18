@@ -1,0 +1,121 @@
+# Simple workflow for deploying static content to GitHub Pages
+name: Deploy static content to Pages
+
+on:
+  # Runs on pushes targeting the default branch
+  push:
+    branches: ["master"]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
+# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  # Single deploy job since we're just deploying
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: windows-2022
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          token: ${{ secrets.SUBMODULE_KEY }}
+
+      - name: Set up Python 3.10.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.10.11
+
+      - name: Set reusable strings
+        # Turn repeated input strings (such as the build output directory) into step outputs. These step outputs can be used throughout the workflow file.
+        id: strings
+        shell: bash
+        run: |
+          echo "build-output-dir=${{ github.workspace }}/build" >> "$GITHUB_OUTPUT"
+          echo "build-install-dir=${{ github.workspace }}/build/install" >> "$GITHUB_OUTPUT"
+          echo "usd-version=2411 >> "$GITHUB_OUTPUT"
+
+      - name: Install Dependencies (Windows)
+        if: runner.os == 'Windows'
+        run: choco install doxygen.install
+
+      - name: Install Python Dependencies
+        run: pip3 install sphinx breathe sphinx-rtd-theme
+  
+      - name: Download USD release
+        run: gh release download USD-${{ steps.strings.outputs.usd_version }}-Artifacts -p "usd-${{ matrix.usd_version }}-${{ matrix.os }}.zip" --repo adobe/USD-Fileformat-plugins
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  
+      - name: Unzip USD release (Windows)
+        if: runner.os == 'Windows'
+        run: Expand-Archive -Path "usd-${{ steps.strings.outputs.usd_version }}-windows-2022.zip" -DestinationPath usd_build -Force
+
+      - name: Set Environment Variables
+        shell: bash
+        run: |
+          if [ "${{ runner.os }}" == "Windows" ]; then
+            echo "${PYTHON_PATH}" >> "$GITHUB_PATH"
+            echo "${{ github.workspace }}/usd_build/bin" >> "$GITHUB_PATH"
+            echo "${{ github.workspace }}/usd_build/lib" >> "$GITHUB_PATH"
+            echo "${{ github.workspace }}/usd_build/lib64" >> "$GITHUB_PATH"
+            echo "${{ github.workspace }}/usd_build/plugin/usd" >> "$GITHUB_PATH"
+            echo "${{ github.workspace }}/bin/bin" >> "$GITHUB_PATH"
+            echo "${{ github.workspace }}/bin/plugin/usd" >> "$GITHUB_PATH"
+            echo "PXR_PLUGINPATH_NAME=${{ github.workspace }}/bin/plugin/usd;${{ github.workspace }}/usd_build/plugin/usd" >> "$GITHUB_ENV"
+          else
+            # Concatenate paths for LD_LIBRARY_PATH
+            ldLibraryPath="${{ github.workspace }}/usd_build/bin:"
+            ldLibraryPath+="${{ github.workspace }}/usd_build/lib:"
+            ldLibraryPath+="${{ github.workspace }}/usd_build/lib64:"
+            ldLibraryPath+="${{ github.workspace }}/usd_build/plugin/usd:"
+            ldLibraryPath+="${{ github.workspace }}/bin/bin:"
+            ldLibraryPath+="${{ github.workspace }}/bin/lib:"
+            ldLibraryPath+="${{ github.workspace }}/bin/plugin/usd"
+            echo "LD_LIBRARY_PATH=$ldLibraryPath" >> "$GITHUB_ENV"
+            echo "PXR_PLUGINPATH_NAME=${{ github.workspace }}/bin/plugin/usd:${{ github.workspace }}/usd_build/plugin/usd" >> "$GITHUB_ENV"
+          fi
+          USD_BUILD_PATH="${{ github.workspace }}/usd_build"
+          USD_BUILD_PATH="${USD_BUILD_PATH//\\//}"
+          echo "USD_BUILD_PATH=$USD_BUILD_PATH" >> "$GITHUB_ENV"
+          echo "PYTHONPATH=${{ github.workspace }}/usd_build/lib/python:${PYTHONPATH}" >> "$GITHUB_ENV"
+
+      - name: Configure CMake
+        # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
+        # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
+        run: >
+          cmake -B ${{ steps.strings.outputs.build-output-dir }}
+          -DCMAKE_BUILD_TYPE=Release
+          -DCMAKE_INSTALL_PREFIX=${{ steps.strings.outputs.build-install-dir }}
+          -S ${{ github.workspace }}
+
+      - name: Build Documentation
+        working-directory: ${{ steps.strings.outputs.build-output-dir }}
+        run: cmake --build ./ --target docs
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          # Upload entire repository
+          path: './build/docs/sphinx/build/html'
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
