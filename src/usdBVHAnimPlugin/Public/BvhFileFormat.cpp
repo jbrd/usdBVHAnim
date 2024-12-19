@@ -21,7 +21,7 @@
 
 PXR_NAMESPACE_USING_DIRECTIVE
 
-namespace usdBVHPlugin {
+namespace usdBVHAnimPlugin {
 class BvhFileFormat : public SdfFileFormat {
 protected:
     BvhFileFormat();
@@ -193,4 +193,4 @@ TF_REGISTRY_FUNCTION(TfType)
 {
     SDF_DEFINE_FILE_FORMAT(BvhFileFormat, SdfFileFormat);
 }
-} // namespace usdBVHPlugin
+} // namespace usdBVHAnimPlugin

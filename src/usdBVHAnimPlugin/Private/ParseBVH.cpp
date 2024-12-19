@@ -28,7 +28,7 @@ static void MultiplyQuat(double a[4], double const b[4])
     a[3] = result[3];
 }
 
-namespace usdBVHPlugin {
+namespace usdBVHAnimPlugin {
 Parse ParseDouble(Parse cursor, double& result)
 {
     constexpr size_t c_NumberBufferSize = 64;
@@ -263,4 +263,4 @@ bool ParseBVH(std::string const& filePath, BVHDocument& result)
     std::ifstream stream(filePath, std::ios::in | std::ios::binary);
     return ParseBVH(stream, result);
 }
-} // namespace usdBVHPlugin
+} // namespace usdBVHAnimPlugin

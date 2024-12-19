@@ -2,7 +2,7 @@
 #include <functional>
 #include <string>
 
-namespace usdBVHPlugin {
+namespace usdBVHAnimPlugin {
 struct Parse {
     char const* m_Begin = nullptr;
     char const* m_End = nullptr;
@@ -93,4 +93,4 @@ struct Parse {
         }
     }
 };
-} // namespace usdBVHPlugin
+} // namespace usdBVHAnimPlugin

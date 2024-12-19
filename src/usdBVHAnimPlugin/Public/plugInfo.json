@@ -3,7 +3,7 @@
     {
       "Info": {
         "Types": {
-          "usdBVHPlugin::BvhFileFormat": {
+          "usdBVHAnimPlugin::BvhFileFormat": {
             "bases": [
               "SdfFileFormat"
             ],

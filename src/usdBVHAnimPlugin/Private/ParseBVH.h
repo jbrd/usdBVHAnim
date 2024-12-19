@@ -2,7 +2,7 @@
 #include <string>
 #include <vector>
 
-namespace usdBVHPlugin {
+namespace usdBVHAnimPlugin {
 enum class BVHChannel {
     None = 0,
     XPosition,
@@ -40,4 +40,4 @@ struct BVHDocument {
 
 bool ParseBVH(std::string const& filePath, BVHDocument& result);
 bool ParseBVH(std::istream& stream, BVHDocument& result);
-} // namespace usdBVHPlugin
+} // namespace usdBVHAnimPlugin
