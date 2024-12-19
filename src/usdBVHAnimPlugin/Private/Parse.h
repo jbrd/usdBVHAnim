@@ -3,15 +3,25 @@
 #include <string>
 
 namespace usdBVHAnimPlugin {
+//! A small class for parsing strings.
 struct Parse {
     char const* m_Begin = nullptr;
     char const* m_End = nullptr;
 
+    //! Returns `true` if the Parse object is still valid, or `false` otherwise.
+    //! This method can be used to determine whether an error has occurred during
+    //! parsing (if it has, an invalid `Parse` object would be returned).
+    //! A `Parse` object is considered valid if it still refers to a string. This
+    //! includes referring to the end of the string (since, its perfectly valid for
+    //! a parse function to succeed and reach the end of the string).
     operator bool() const
     {
         return m_Begin && m_End && m_Begin <= m_End;
     }
 
+    //! Parse a single character from the string. If that character is matched,
+    //! a new `Parse` object is returned beginning at the next character. Otherwise,
+    //! an invalid `Parse` object is returned.
     Parse Char(char value) const
     {
         if ((*this) && *m_Begin == value) {
