@@ -2,7 +2,7 @@
 #include "Tests.h"
 #include <sstream>
 
-using namespace usdBVHPlugin;
+using namespace usdBVHAnimPlugin;
 
 // See 'data/test_bvh.*' for data source files
 static const char s_TestBVH[] =
@@ -53,8 +53,8 @@ TEST(ParseBVH_ParseTest)
 
     // Parse the BVH data and ensure it is successful
     std::istringstream stream(s_TestBVH, std::ios::in | std::ios::binary);
-    usdBVHPlugin::BVHDocument document;
-    bool result = usdBVHPlugin::ParseBVH(stream, document);
+    usdBVHAnimPlugin::BVHDocument document;
+    bool result = usdBVHAnimPlugin::ParseBVH(stream, document);
     TEST_REQUIRE(result == true);
 
     // Validate the parsed document

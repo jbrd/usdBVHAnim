@@ -1,7 +1,7 @@
 #include "Parse.h"
 #include "Tests.h"
 
-using namespace usdBVHPlugin;
+using namespace usdBVHAnimPlugin;
 
 BEGIN_TEST_FIXTURE(ParseTests)
 
