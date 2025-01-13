@@ -22,16 +22,39 @@
 PXR_NAMESPACE_USING_DIRECTIVE
 
 namespace usdBVHAnimPlugin {
+
+//! An SdfFileFormat for BVH animation data, transcoding the BVH data into usdSkel prims.
 class BvhFileFormat : public SdfFileFormat {
 protected:
     BvhFileFormat();
     virtual ~BvhFileFormat() = default;
 
 public:
+    //! Returns `true` if the given file path can be read by this plug-in or `false` otherwise.
     bool CanRead(std::string const& filePath) const override;
+
+    //! Reads the given BVH file into the given SdfLayer. Returns `true` on success or `false` on failure.
     bool Read(SdfLayer* layer, std::string const& resolvedPath, bool metadataOnly) const override;
-    bool WriteToString(SdfLayer const& layer, std::string* str, std::string const& comment) const override;
-    bool WriteToStream(SdfSpecHandle const& spec, std::ostream& out, size_t indent) const override;
+
+    //! This function always returns false. Only reading of BVH files is supported.
+    bool WriteToString(SdfLayer const& layer, std::string* str, std::string const& comment) const override
+    {
+        // These are unused, but names kept so that they show up in docs
+        TF_UNUSED(layer);
+        TF_UNUSED(str);
+        TF_UNUSED(comment);
+        return false;
+    }
+
+    //! This function always returns false. Only reading of BVH files is supported.
+    bool WriteToStream(SdfSpecHandle const& spec, std::ostream& out, size_t indent) const override
+    {
+        // These are unused, but names kept so that they show up in docs
+        TF_UNUSED(spec);
+        TF_UNUSED(out);
+        TF_UNUSED(indent);
+        return false;
+    }
 
     SDF_FILE_FORMAT_FACTORY_ACCESS;
 };
@@ -112,7 +135,7 @@ bool BvhFileFormat::Read(SdfLayer* layer, std::string const& resolvedPath, bool 
         std::string jointPath = document.m_JointNames[jointIndex];
         int parentIndex = document.m_JointParents[jointIndex];
         BVHOffset currentOffset = document.m_JointOffsets[jointIndex];
-        while (parentIndex >= 0) {
+        while (parentIndex != BVHDocument::c_RootParentIndex) {
             jointPath = document.m_JointNames[parentIndex] + "/" + jointPath;
             parentIndex = document.m_JointParents[parentIndex];
         }
@@ -173,18 +196,6 @@ bool BvhFileFormat::Read(SdfLayer* layer, std::string const& resolvedPath, bool 
     skelStage->SetDefaultPrim(skelRoot.GetPrim());
     layer->TransferContent(skelLayer);
     return true;
-}
-
-bool BvhFileFormat::WriteToString(SdfLayer const& /*layer*/, std::string* /*str*/, std::string const& /*comment*/) const
-{
-    // This plugin doesn't support writing
-    return false;
-}
-
-bool BvhFileFormat::WriteToStream(SdfSpecHandle const& /*spec*/, std::ostream& /*out*/, size_t /*indent*/) const
-{
-    // This plugin doesn't support writing
-    return false;
 }
 
 TF_DECLARE_WEAK_AND_REF_PTRS(BvhFileFormat);
