@@ -155,7 +155,6 @@ bool BvhFileFormat::Read(SdfLayer* layer, std::string const& resolvedPath, bool 
     size_t numFrames = document.m_FrameTransforms.size() / document.m_JointNames.size();
     double framesPerSecond = 1.0 / document.m_FrameTime;
     skelLayer->SetTimeCodesPerSecond(framesPerSecond);
-    skelLayer->SetFramesPerSecond(framesPerSecond);
     skelLayer->SetStartTimeCode(1.0);
     skelLayer->SetEndTimeCode(static_cast<double>(1 + numFrames));
 
