@@ -10,6 +10,7 @@
 #include <pxr/usd/sdf/fileFormat.h>
 #include <pxr/usd/sdf/layer.h>
 #include <pxr/usd/usd/stage.h>
+#include <pxr/usd/usdGeom/boundable.h>
 #include <pxr/usd/usdSkel/animation.h>
 #include <pxr/usd/usdSkel/bindingAPI.h>
 #include <pxr/usd/usdSkel/root.h>
@@ -104,8 +105,8 @@ bool BvhFileFormat::Read(SdfLayer* layer, std::string const& resolvedPath, bool 
 
     SdfLayerRefPtr skelLayer = SdfLayer::CreateAnonymous(".usda");
     UsdStageRefPtr skelStage = UsdStage::Open(skelLayer);
-    UsdSkelRoot skelRoot = UsdSkelRoot::Define(skelStage, SdfPath("/SkelRoot"));
-    UsdSkelSkeleton skeleton = UsdSkelSkeleton::Define(skelStage, SdfPath("/SkelRoot/Skeleton"));
+    UsdSkelRoot skelRoot = UsdSkelRoot::Define(skelStage, SdfPath("/Root"));
+    UsdSkelSkeleton skeleton = UsdSkelSkeleton::Define(skelStage, SdfPath("/Root/Skeleton"));
     UsdAttribute jointsAttr = skeleton.CreateJointsAttr();
     UsdAttribute bindTransformsAttr = skeleton.CreateBindTransformsAttr();
     UsdAttribute restTransformsAttr = skeleton.CreateRestTransformsAttr();
@@ -146,7 +147,7 @@ bool BvhFileFormat::Read(SdfLayer* layer, std::string const& resolvedPath, bool 
     restTransformsAttr.Set(bindPoseLS);
 
     // Add animation data
-    UsdSkelAnimation animation = UsdSkelAnimation::Define(skelStage, SdfPath("/SkelRoot/Skeleton/Animation"));
+    UsdSkelAnimation animation = UsdSkelAnimation::Define(skelStage, SdfPath("/Root/Animation"));
     UsdAttribute animJointsAttr = animation.CreateJointsAttr();
     UsdAttribute animTranslationsAttr = animation.CreateTranslationsAttr();
     UsdAttribute animRotationsAttr = animation.CreateRotationsAttr();
@@ -157,6 +158,9 @@ bool BvhFileFormat::Read(SdfLayer* layer, std::string const& resolvedPath, bool 
     skelLayer->SetTimeCodesPerSecond(framesPerSecond);
     skelLayer->SetStartTimeCode(1.0);
     skelLayer->SetEndTimeCode(static_cast<double>(1 + numFrames));
+
+    UsdGeomBoundable boundable(skelRoot.GetPrim());
+    UsdAttribute extents = boundable.CreateExtentAttr();
 
     for (size_t frameIndex = 0; frameIndex < numFrames; ++frameIndex) {
         VtArray<GfVec3f> animTranslations;
@@ -185,13 +189,21 @@ bool BvhFileFormat::Read(SdfLayer* layer, std::string const& resolvedPath, bool 
 
     animJointsAttr.Set(jointPaths);
 
-    // Add skel root and transfer all data to stage
     UsdSkelBindingAPI::Apply(skelRoot.GetPrim());
     UsdSkelBindingAPI::Apply(skeleton.GetPrim());
     UsdSkelBindingAPI skelRootBinding(skelRoot.GetPrim());
-    skelRootBinding.CreateSkeletonRel().AddTarget(SdfPath("/SkelRoot/Skeleton"));
+    skelRootBinding.CreateSkeletonRel().AddTarget(SdfPath("/Root/Skeleton"));
     UsdSkelBindingAPI skelBinding(skeleton.GetPrim());
-    skelBinding.CreateAnimationSourceRel().AddTarget(SdfPath("/SkelRoot/Skeleton/Animation"));
+    skelBinding.CreateAnimationSourceRel().AddTarget(SdfPath("/Root/Animation"));
+
+    // Calculate extents
+    for (size_t frameIndex = 0; frameIndex < numFrames; ++frameIndex) {
+        VtVec3fArray extent;
+        UsdGeomBoundable::ComputeExtentFromPlugins(skelRoot, 1.0 + frameIndex, &extent);
+        skelLayer->SetTimeSample(extents.GetPath(), 1.0 + frameIndex, extent);
+    }
+
+    // Add skel root and transfer all data to stage
     skelStage->SetDefaultPrim(skelRoot.GetPrim());
     layer->TransferContent(skelLayer);
     return true;
