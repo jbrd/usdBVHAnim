@@ -58,6 +58,8 @@ The plug-in itself is implemented in `BvhFileFormat.cpp`, in which the `BvhFileF
 implements `SdfFileFormat` for the BVH file format. This class has only implemented the **reading**
 functionality for BVH files - writing BVH files is not currently supported.
 
+Also note that currently, the entire file is translated and cached in memory at the time the file is opened. BVH data is not currently lazily loaded (e.g. `SdfAbstractData` is not currently implemented for BVH data).
+
 .. doxygenclass:: usdBVHAnimPlugin::BvhFileFormat
    :project: usdBVHAnimPlugin
    :members:
