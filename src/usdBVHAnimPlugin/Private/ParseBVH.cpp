@@ -14,7 +14,7 @@ static const char* const c_WS = " \t\r\n";
 static const char* const c_AlphaNumeric = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 static const char* const c_Double = "-0123456789.";
 
-static void MultiplyQuat(double a[4], double const b[4])
+static void MultiplyBVHQuat(double a[4], double const b[4])
 {
     double result[4];
     result[0] = a[3] * b[0] + a[0] * b[3] + a[1] * b[2] - a[2] * b[1];
@@ -98,18 +98,20 @@ Parse ParseJointChannels(Parse cursor, unsigned int& numChannels, uint32_t& chan
         if (!cursor) {
             return cursor;
         }
+
+        constexpr unsigned int c_BitCount = static_cast<unsigned int>(BVHChannel::BitCount);
         if (token == "Xposition") {
-            channels |= static_cast<unsigned int>(BVHChannel::XPosition) << (3 * i);
+            channels |= static_cast<unsigned int>(BVHChannel::XPosition) << (c_BitCount * i);
         } else if (token == "Yposition") {
-            channels |= static_cast<unsigned int>(BVHChannel::YPosition) << (3 * i);
+            channels |= static_cast<unsigned int>(BVHChannel::YPosition) << (c_BitCount * i);
         } else if (token == "Zposition") {
-            channels |= static_cast<unsigned int>(BVHChannel::ZPosition) << (3 * i);
+            channels |= static_cast<unsigned int>(BVHChannel::ZPosition) << (c_BitCount * i);
         } else if (token == "Xrotation") {
-            channels |= static_cast<unsigned int>(BVHChannel::XRotation) << (3 * i);
+            channels |= static_cast<unsigned int>(BVHChannel::XRotation) << (c_BitCount * i);
         } else if (token == "Yrotation") {
-            channels |= static_cast<unsigned int>(BVHChannel::YRotation) << (3 * i);
+            channels |= static_cast<unsigned int>(BVHChannel::YRotation) << (c_BitCount * i);
         } else if (token == "Zrotation") {
-            channels |= static_cast<unsigned int>(BVHChannel::ZRotation) << (3 * i);
+            channels |= static_cast<unsigned int>(BVHChannel::ZRotation) << (c_BitCount * i);
         }
     }
     return cursor.Skip(c_WS);
@@ -174,7 +176,7 @@ Parse ParseMotion(Parse cursor, BVHDocument& result)
                 double value = 0.0;
                 double const c_DegToRad = M_PI / 180.0;
                 cursor = ParseDouble(cursor, value).Skip(c_WS);
-                BVHChannel channel = channels & BVHChannel::Mask;
+                BVHChannel channel = channels & BVHChannel::BitMask;
                 switch (channel) {
                 case BVHChannel::XPosition:
                     transform.m_Translation[0] += value;
@@ -187,17 +189,17 @@ Parse ParseMotion(Parse cursor, BVHDocument& result)
                     break;
                 case BVHChannel::XRotation: {
                     double quat[4] = { std::sin(value * 0.5 * c_DegToRad), 0.0f, 0.0f, std::cos(value * 0.5 * c_DegToRad) };
-                    MultiplyQuat(transform.m_RotationQuat, quat);
+                    MultiplyBVHQuat(transform.m_RotationQuat, quat);
                     break;
                 }
                 case BVHChannel::YRotation: {
                     double quat[4] = { 0.0f, std::sin(value * 0.5 * c_DegToRad), 0.0f, std::cos(value * 0.5 * c_DegToRad) };
-                    MultiplyQuat(transform.m_RotationQuat, quat);
+                    MultiplyBVHQuat(transform.m_RotationQuat, quat);
                     break;
                 }
                 case BVHChannel::ZRotation: {
                     double quat[4] = { 0.0f, 0.0f, std::sin(value * 0.5 * c_DegToRad), std::cos(value * 0.5 * c_DegToRad) };
-                    MultiplyQuat(transform.m_RotationQuat, quat);
+                    MultiplyBVHQuat(transform.m_RotationQuat, quat);
                     break;
                 }
                 };
@@ -225,7 +227,7 @@ bool ParseBVH(std::istream& stream, BVHDocument& result)
     CHECK_GOOD(stream);
 
     result.m_JointNames.push_back({});
-    result.m_JointParents.push_back(-1);
+    result.m_JointParents.push_back(BVHDocument::c_RootParentIndex);
     result.m_JointOffsets.push_back({});
     result.m_JointNumChannels.push_back(0);
     result.m_JointChannels.push_back(0);

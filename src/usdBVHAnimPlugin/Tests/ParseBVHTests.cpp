@@ -77,17 +77,17 @@ TEST(ParseBVH_ParseTest)
     TEST_REQUIRE(document.m_JointNumChannels[0] == 6);
     TEST_REQUIRE(document.m_JointNumChannels[1] == 3);
     TEST_REQUIRE(document.m_JointChannels.size() == c_NumJoints);
-    TEST_REQUIRE(((document.m_JointChannels[0] >> 0) & BVHChannel::Mask) == BVHChannel::XPosition);
-    TEST_REQUIRE(((document.m_JointChannels[0] >> 3) & BVHChannel::Mask) == BVHChannel::YPosition);
-    TEST_REQUIRE(((document.m_JointChannels[0] >> 6) & BVHChannel::Mask) == BVHChannel::ZPosition);
-    TEST_REQUIRE(((document.m_JointChannels[0] >> 9) & BVHChannel::Mask) == BVHChannel::XRotation);
-    TEST_REQUIRE(((document.m_JointChannels[0] >> 12) & BVHChannel::Mask) == BVHChannel::YRotation);
-    TEST_REQUIRE(((document.m_JointChannels[0] >> 15) & BVHChannel::Mask) == BVHChannel::ZRotation);
-    TEST_REQUIRE(((document.m_JointChannels[0] >> 18) & BVHChannel::Mask) == BVHChannel::None);
-    TEST_REQUIRE(((document.m_JointChannels[1] >> 0) & BVHChannel::Mask) == BVHChannel::XRotation);
-    TEST_REQUIRE(((document.m_JointChannels[1] >> 3) & BVHChannel::Mask) == BVHChannel::YRotation);
-    TEST_REQUIRE(((document.m_JointChannels[1] >> 6) & BVHChannel::Mask) == BVHChannel::ZRotation);
-    TEST_REQUIRE(((document.m_JointChannels[1] >> 9) & BVHChannel::Mask) == BVHChannel::None);
+    TEST_REQUIRE(((document.m_JointChannels[0] >> 0) & BVHChannel::BitMask) == BVHChannel::XPosition);
+    TEST_REQUIRE(((document.m_JointChannels[0] >> 3) & BVHChannel::BitMask) == BVHChannel::YPosition);
+    TEST_REQUIRE(((document.m_JointChannels[0] >> 6) & BVHChannel::BitMask) == BVHChannel::ZPosition);
+    TEST_REQUIRE(((document.m_JointChannels[0] >> 9) & BVHChannel::BitMask) == BVHChannel::XRotation);
+    TEST_REQUIRE(((document.m_JointChannels[0] >> 12) & BVHChannel::BitMask) == BVHChannel::YRotation);
+    TEST_REQUIRE(((document.m_JointChannels[0] >> 15) & BVHChannel::BitMask) == BVHChannel::ZRotation);
+    TEST_REQUIRE(((document.m_JointChannels[0] >> 18) & BVHChannel::BitMask) == BVHChannel::None);
+    TEST_REQUIRE(((document.m_JointChannels[1] >> 0) & BVHChannel::BitMask) == BVHChannel::XRotation);
+    TEST_REQUIRE(((document.m_JointChannels[1] >> 3) & BVHChannel::BitMask) == BVHChannel::YRotation);
+    TEST_REQUIRE(((document.m_JointChannels[1] >> 6) & BVHChannel::BitMask) == BVHChannel::ZRotation);
+    TEST_REQUIRE(((document.m_JointChannels[1] >> 9) & BVHChannel::BitMask) == BVHChannel::None);
     TEST_REQUIRE(std::fabs(document.m_FrameTime - 0.041667) < c_Tolerance);
     TEST_REQUIRE(document.m_FrameTransforms.size() == c_NumFrames * c_NumJoints);
 

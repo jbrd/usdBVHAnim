@@ -10,6 +10,7 @@
 #include <pxr/usd/sdf/fileFormat.h>
 #include <pxr/usd/sdf/layer.h>
 #include <pxr/usd/usd/stage.h>
+#include <pxr/usd/usdGeom/boundable.h>
 #include <pxr/usd/usdSkel/animation.h>
 #include <pxr/usd/usdSkel/bindingAPI.h>
 #include <pxr/usd/usdSkel/root.h>
@@ -22,16 +23,39 @@
 PXR_NAMESPACE_USING_DIRECTIVE
 
 namespace usdBVHAnimPlugin {
+
+//! An SdfFileFormat for BVH animation data, transcoding the BVH data into usdSkel prims.
 class BvhFileFormat : public SdfFileFormat {
 protected:
     BvhFileFormat();
     virtual ~BvhFileFormat() = default;
 
 public:
+    //! Returns `true` if the given file path can be read by this plug-in or `false` otherwise.
     bool CanRead(std::string const& filePath) const override;
+
+    //! Reads the given BVH file into the given SdfLayer. Returns `true` on success or `false` on failure.
     bool Read(SdfLayer* layer, std::string const& resolvedPath, bool metadataOnly) const override;
-    bool WriteToString(SdfLayer const& layer, std::string* str, std::string const& comment) const override;
-    bool WriteToStream(SdfSpecHandle const& spec, std::ostream& out, size_t indent) const override;
+
+    //! This function always returns false. Only reading of BVH files is supported.
+    bool WriteToString(SdfLayer const& layer, std::string* str, std::string const& comment) const override
+    {
+        // These are unused, but names kept so that they show up in docs
+        TF_UNUSED(layer);
+        TF_UNUSED(str);
+        TF_UNUSED(comment);
+        return false;
+    }
+
+    //! This function always returns false. Only reading of BVH files is supported.
+    bool WriteToStream(SdfSpecHandle const& spec, std::ostream& out, size_t indent) const override
+    {
+        // These are unused, but names kept so that they show up in docs
+        TF_UNUSED(spec);
+        TF_UNUSED(out);
+        TF_UNUSED(indent);
+        return false;
+    }
 
     SDF_FILE_FORMAT_FACTORY_ACCESS;
 };
@@ -81,8 +105,8 @@ bool BvhFileFormat::Read(SdfLayer* layer, std::string const& resolvedPath, bool 
 
     SdfLayerRefPtr skelLayer = SdfLayer::CreateAnonymous(".usda");
     UsdStageRefPtr skelStage = UsdStage::Open(skelLayer);
-    UsdSkelRoot skelRoot = UsdSkelRoot::Define(skelStage, SdfPath("/SkelRoot"));
-    UsdSkelSkeleton skeleton = UsdSkelSkeleton::Define(skelStage, SdfPath("/SkelRoot/Skeleton"));
+    UsdSkelRoot skelRoot = UsdSkelRoot::Define(skelStage, SdfPath("/Root"));
+    UsdSkelSkeleton skeleton = UsdSkelSkeleton::Define(skelStage, SdfPath("/Root/Skeleton"));
     UsdAttribute jointsAttr = skeleton.CreateJointsAttr();
     UsdAttribute bindTransformsAttr = skeleton.CreateBindTransformsAttr();
     UsdAttribute restTransformsAttr = skeleton.CreateRestTransformsAttr();
@@ -112,7 +136,7 @@ bool BvhFileFormat::Read(SdfLayer* layer, std::string const& resolvedPath, bool 
         std::string jointPath = document.m_JointNames[jointIndex];
         int parentIndex = document.m_JointParents[jointIndex];
         BVHOffset currentOffset = document.m_JointOffsets[jointIndex];
-        while (parentIndex >= 0) {
+        while (parentIndex != BVHDocument::c_RootParentIndex) {
             jointPath = document.m_JointNames[parentIndex] + "/" + jointPath;
             parentIndex = document.m_JointParents[parentIndex];
         }
@@ -123,7 +147,7 @@ bool BvhFileFormat::Read(SdfLayer* layer, std::string const& resolvedPath, bool 
     restTransformsAttr.Set(bindPoseLS);
 
     // Add animation data
-    UsdSkelAnimation animation = UsdSkelAnimation::Define(skelStage, SdfPath("/SkelRoot/Skeleton/Animation"));
+    UsdSkelAnimation animation = UsdSkelAnimation::Define(skelStage, SdfPath("/Root/Animation"));
     UsdAttribute animJointsAttr = animation.CreateJointsAttr();
     UsdAttribute animTranslationsAttr = animation.CreateTranslationsAttr();
     UsdAttribute animRotationsAttr = animation.CreateRotationsAttr();
@@ -132,9 +156,11 @@ bool BvhFileFormat::Read(SdfLayer* layer, std::string const& resolvedPath, bool 
     size_t numFrames = document.m_FrameTransforms.size() / document.m_JointNames.size();
     double framesPerSecond = 1.0 / document.m_FrameTime;
     skelLayer->SetTimeCodesPerSecond(framesPerSecond);
-    skelLayer->SetFramesPerSecond(framesPerSecond);
     skelLayer->SetStartTimeCode(1.0);
     skelLayer->SetEndTimeCode(static_cast<double>(1 + numFrames));
+
+    UsdGeomBoundable boundable(skelRoot.GetPrim());
+    UsdAttribute extents = boundable.CreateExtentAttr();
 
     for (size_t frameIndex = 0; frameIndex < numFrames; ++frameIndex) {
         VtArray<GfVec3f> animTranslations;
@@ -163,28 +189,24 @@ bool BvhFileFormat::Read(SdfLayer* layer, std::string const& resolvedPath, bool 
 
     animJointsAttr.Set(jointPaths);
 
-    // Add skel root and transfer all data to stage
     UsdSkelBindingAPI::Apply(skelRoot.GetPrim());
     UsdSkelBindingAPI::Apply(skeleton.GetPrim());
     UsdSkelBindingAPI skelRootBinding(skelRoot.GetPrim());
-    skelRootBinding.CreateSkeletonRel().AddTarget(SdfPath("/SkelRoot/Skeleton"));
+    skelRootBinding.CreateSkeletonRel().AddTarget(SdfPath("/Root/Skeleton"));
     UsdSkelBindingAPI skelBinding(skeleton.GetPrim());
-    skelBinding.CreateAnimationSourceRel().AddTarget(SdfPath("/SkelRoot/Skeleton/Animation"));
+    skelBinding.CreateAnimationSourceRel().AddTarget(SdfPath("/Root/Animation"));
+
+    // Calculate extents
+    for (size_t frameIndex = 0; frameIndex < numFrames; ++frameIndex) {
+        VtVec3fArray extent;
+        UsdGeomBoundable::ComputeExtentFromPlugins(skelRoot, 1.0 + frameIndex, &extent);
+        skelLayer->SetTimeSample(extents.GetPath(), 1.0 + frameIndex, extent);
+    }
+
+    // Add skel root and transfer all data to stage
     skelStage->SetDefaultPrim(skelRoot.GetPrim());
     layer->TransferContent(skelLayer);
     return true;
-}
-
-bool BvhFileFormat::WriteToString(SdfLayer const& /*layer*/, std::string* /*str*/, std::string const& /*comment*/) const
-{
-    // This plugin doesn't support writing
-    return false;
-}
-
-bool BvhFileFormat::WriteToStream(SdfSpecHandle const& /*spec*/, std::ostream& /*out*/, size_t /*indent*/) const
-{
-    // This plugin doesn't support writing
-    return false;
 }
 
 TF_DECLARE_WEAK_AND_REF_PTRS(BvhFileFormat);
