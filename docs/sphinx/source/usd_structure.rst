@@ -17,6 +17,17 @@ Timing information is encoded into the metadata of the root layer, and relations
 the animation data drives the skeleton by default.
 
 
+A Note About Timing Metadata
+----------------------------
+
+The plug-in uses the timing information in the BVH file to set the ``timeCodesPerSecond`` metadata on the root layer.
+
+The plug-in deliberately does not set ``framesPerSecond`` on the root layer, as it is the responsibility of the consumer
+of animation content to specify the desired playback frame rate, and not the responsibility of the content itself
+to dictate this.
+
+
+
 A Note About Extents
 --------------------
 
