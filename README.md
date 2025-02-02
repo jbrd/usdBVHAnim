@@ -1,10 +1,12 @@
 # usdBVHAnim
 
-**[Documentation](https://jbrd.github.io/usdBVHAnim/)**
+[![CMake on multiple platforms](https://github.com/jbrd/usdBVHAnim/actions/workflows/cmake-multi-platform.yml/badge.svg)](https://github.com/jbrd/usdBVHAnim/actions/workflows/cmake-multi-platform.yml)
+| **[Changelog](CHANGELOG.md)**
+| **[Documentation](https://jbrd.github.io/usdBVHAnim/)**
 
 This plug-in enables USD to read BVH animation files.
 
-![BVH skeleton and animation loaded in usdview](docs\sphinx\source\screenshot-bvh-skeleton.png)
+![BVH skeleton and animation loaded in usdview](docs/sphinx/source/screenshot-bvh-skeleton.png)
 
 Once installed, USD can either read them directly, e.g.:
 
@@ -21,7 +23,9 @@ over "AnimationData"
 }
 ```
 
-In practise, here are some example use cases that are made possible by the plug-in:
+## Example Use Cases
+
+Here are some example use cases that are made possible by the plug-in:
 
 💡Use `usdview` to inspect and play back skeletal animation data in BVH files
 
@@ -41,7 +45,7 @@ In practise, here are some example use cases that are made possible by the plug-
 To illustrate one such use case, here is a screenshot of the plug-in being used to bind a BVH animation from the
 Ubisoft LAFAN1 dataset to its sample model, visualised in usdview.
 
-![usdview screenshot showing the binding of a BVH animation from the LAFAN1 dataset with its sample model](docs\sphinx\source\screenshot-lafan1-model-and-anim.png)
+![usdview screenshot showing the binding of a BVH animation from the LAFAN1 dataset with its sample model](docs/sphinx/source/screenshot-lafan1-model-and-anim.png)
 
 
 
