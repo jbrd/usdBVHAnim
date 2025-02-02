@@ -8,7 +8,7 @@ First, make sure you are building a version of the plug-in that is compatible wi
 the version of USD you are targetting:
 
 .. list-table::
-   :widths: 25 25
+   :widths: 25 25 25
    :header-rows: 1
 
    * - Plugin Version
