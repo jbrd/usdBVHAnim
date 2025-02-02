@@ -159,6 +159,6 @@ Likewise, to build this plugin against a Debug build of OpenUSD, please use ``--
 At this point, the plug-in should be available whenever you use USD.
 
 
-# Contributors
+## Contributors
 
 * James Bird (@jbrd)
