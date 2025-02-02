@@ -25,40 +25,87 @@ Next, make sure you have the following software installed:
 Linux and MacOS
 ^^^^^^^^^^^^^^^
 
-* An OpenUSD Installation (see version compatibility table)
-* Git
-* CMake
-* Clang
-* Clang-format
-* Valgrind (for tests only)
-* Doxygen (documentation only)
-* Python 3 (documentation only)
-* Sphinx (``pip3 install sphinx``)
-* Breathe (``pip3 install breathe``)
-* ReadTheDocs Theme for Sphinx (``pip3 install sphinx-rtd-theme``)
+* **Required**
+
+  * An OpenUSD Installation (see version compatibility table)
+  * CMake
+  * GCC or Clang
+
+* Code Formatting (when ``CLANG_FORMAT=on``)
+
+  * Clang
+  * Clang-format
+
+* Documentation (when ``DOCUMENTATION=on``)
+
+  * Doxygen
+  * Python 3
+  * Sphinx (``pip3 install sphinx``)
+  * Breathe (``pip3 install breathe``)
+  * ReadTheDocs Theme for Sphinx (``pip3 install sphinx-rtd-theme``)
+
+* Testing
+
+  * Valgrind (optional and only when ``VALGRIND=on``)
+
 
 Windows
 ^^^^^^^
 
-* An OpenUSD Installation (see version compatibility table)
-* Git for Windows
-* Visual Studio 2022 with the following components:
+* **Required**
 
-   * C++ Clang Compiler for Windows
-   * MSBuild support for LLVM (clang-cl) toolset
-   * C++ CMake tools for Windows
+  * An OpenUSD Installation (see version compatibility table)
+  * Visual Studio 2022 with the following components:
+    * C++ CMake tools for Windows
 
-* Chocolatey and the following packages:
+* Code Formatting (when ``CLANG_FORMAT=on``)
 
-   * Doxygen (``choco install doxygen.install``)
-   * Python 3 (``choco install python3``)
-   * Sphinx (``pip3 install sphinx``)
-   * Breathe (``pip3 install breathe``)
-   * ReadTheDocs Theme for Sphinx (``pip3 install sphinx-rtd-theme``)
+  * Visual Studio 2022 with the following components:
+
+    * C++ Clang Compiler for Windows (17.0.0 or above)
+    * MSBuild support for LLVM (clang-cl) toolset
+
+* Documentation (when ``DOCUMENTATION=on``)
+
+  * Chocolatey and the following packages:
+
+    * Doxygen (``choco install doxygen.install``)
+    * Python 3 (``choco install python3``)
+    * Sphinx (``pip3 install sphinx``)
+    * Breathe (``pip3 install breathe``)
+    * ReadTheDocs Theme for Sphinx (``pip3 install sphinx-rtd-theme``)
 
 
 Build Instructions
 ------------------
+
+Build Options
+^^^^^^^^^^^^^
+
+The following options can be specified on the command-line when configuring CMake via the ``-D`` argument:
+
+.. list-table::
+   :widths: 20 60 20
+   :header-rows: 1
+
+   * - Option
+     - Description
+     - Default Value
+   * - ``CLANG_FORMAT``
+     - Include Clang Format targets ``[on/off]``
+     - ``on``
+   * - ``DOCUMENTATION``
+     - Include documentation targets ``[on/off]``
+     - ``on``
+   * - ``STRICT``
+     - Strict compilation (all warnings, warnings as errors) ``[on/off]``
+     - ``on``
+   * - ``VALGRIND``
+     - Additionally run unit tests through Valgrind (if installed, Linux only) ``[on/off]``
+     - ``on``
+
+Contributors are encouraged to install the full set of toolchain requirements, leave all of these turned on by default, such that the entire toolchain is exercised.
+
 
 Build Configurations
 ^^^^^^^^^^^^^^^^^^^^
