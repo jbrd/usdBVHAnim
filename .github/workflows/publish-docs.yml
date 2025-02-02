@@ -47,7 +47,7 @@ jobs:
         run: |
           echo "build-output-dir=${{ github.workspace }}/build" >> "$GITHUB_OUTPUT"
           echo "build-install-dir=${{ github.workspace }}/build/install" >> "$GITHUB_OUTPUT"
-          echo "usd-version=2502" >> "$GITHUB_OUTPUT"
+          echo "usd-version=2411" >> "$GITHUB_OUTPUT"
 
       - name: Install Dependencies (Windows)
         if: runner.os == 'Windows'
