@@ -1,5 +1,6 @@
 #include "ParseBVH.h"
 #include "Tests.h"
+#include <cmath>
 #include <sstream>
 
 using namespace usdBVHAnimPlugin;
