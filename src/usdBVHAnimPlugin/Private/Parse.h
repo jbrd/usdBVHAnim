@@ -29,7 +29,7 @@ struct Parse {
     //! an invalid `Parse` object is returned.
     Parse Char(char value) const
     {
-        if ((*this) && *m_Begin == value) {
+        if (m_Begin && m_End && m_Begin < m_End && *m_Begin == value) {
             return Parse { m_Begin + 1, m_End };
         }
         return Parse {};
