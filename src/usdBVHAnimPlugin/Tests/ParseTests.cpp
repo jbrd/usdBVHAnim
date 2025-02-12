@@ -140,7 +140,7 @@ TEST(Parse_AnyOf_Char_Valid_On_SecondMatch)
 {
     char const* stream = "ABC";
     Parse parse = { stream, stream + 3 };
-    TEST_REQUIRE("XA");
+    TEST_REQUIRE(parse.AnyOf("XA"));
 }
 
 TEST(Parse_AnyOf_Char_NotValid_On_NoMatch)
