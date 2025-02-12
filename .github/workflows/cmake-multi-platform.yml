@@ -12,29 +12,11 @@ jobs:
 
     strategy:
       fail-fast: true
-
-      # Set up a matrix to run the following 3 configurations:
-      # 1. <Windows, Release, latest Clang compiler toolchain on the default runner image, default generator>
-      # 2. <Linux, Release, latest Clang compiler toolchain on the default runner image, default generator>
-      #
-      # To add more build types (Release, Debug, RelWithDebInfo, etc.) customize the build_type list.
       matrix:
-        #os: [macos-latest, ubuntu-latest, windows-latest]
-        os: [windows-2022]
+        os: [ubuntu-22.04, windows-2022]
         build_type: [Release]
-        c_compiler: [clang]  # TODO: Test alternative compilers in the future (cl, gcc)
         python_version: [3.10.11]  # Has to match the version that was used to build USD
         usd_version: [2411]
-        include:
-          - os: windows-2022
-            c_compiler: "clang"
-            cxx_compiler: "clang++"
-          #- os: ubuntu-latest
-          #  c_compiler: "clang"
-          #  cxx_compiler: "clang++"
-          #- os: macos-latest
-          #  c_compiler: "clang"
-          #  cxx_compiler: "clang++"
 
     steps:
     - uses: actions/checkout@v4
@@ -57,7 +39,9 @@ jobs:
 
     - name: Install Dependencies (Linux)
       if: runner.os == 'Linux'
-      run: sudo apt install clang-format doxygen valgrind
+      run: |
+        sudo apt-get update
+        sudo apt-get install doxygen valgrind libx11-dev libglew-dev libglew-dev libxrandr-dev libxcursor-dev libxinerama-dev libxi-dev
     - name: Install Dependencies (Windows)
       if: runner.os == 'Windows'
       run: choco install doxygen.install
@@ -90,18 +74,18 @@ jobs:
           echo "${{ github.workspace }}/usd_build/lib" >> "$GITHUB_PATH"
           echo "${{ github.workspace }}/usd_build/lib64" >> "$GITHUB_PATH"
           echo "${{ github.workspace }}/usd_build/plugin/usd" >> "$GITHUB_PATH"
-          echo "${{ github.workspace }}/bin/bin" >> "$GITHUB_PATH"
-          echo "${{ github.workspace }}/bin/plugin/usd" >> "$GITHUB_PATH"
           echo "PXR_PLUGINPATH_NAME=${{ github.workspace }}/bin/plugin/usd;${{ github.workspace }}/usd_build/plugin/usd" >> "$GITHUB_ENV"
         else
           # Concatenate paths for LD_LIBRARY_PATH
+          echo "${PYTHON_PATH}" >> "$GITHUB_PATH"
+          echo "${{ github.workspace }}/usd_build/bin" >> "$GITHUB_PATH"
+          echo "${{ github.workspace }}/usd_build/lib" >> "$GITHUB_PATH"
+          echo "${{ github.workspace }}/usd_build/lib64" >> "$GITHUB_PATH"
+          echo "${{ github.workspace }}/usd_build/plugin/usd" >> "$GITHUB_PATH"
           ldLibraryPath="${{ github.workspace }}/usd_build/bin:"
           ldLibraryPath+="${{ github.workspace }}/usd_build/lib:"
           ldLibraryPath+="${{ github.workspace }}/usd_build/lib64:"
           ldLibraryPath+="${{ github.workspace }}/usd_build/plugin/usd:"
-          ldLibraryPath+="${{ github.workspace }}/bin/bin:"
-          ldLibraryPath+="${{ github.workspace }}/bin/lib:"
-          ldLibraryPath+="${{ github.workspace }}/bin/plugin/usd"
           echo "LD_LIBRARY_PATH=$ldLibraryPath" >> "$GITHUB_ENV"
           echo "PXR_PLUGINPATH_NAME=${{ github.workspace }}/bin/plugin/usd:${{ github.workspace }}/usd_build/plugin/usd" >> "$GITHUB_ENV"
         fi
@@ -115,8 +99,6 @@ jobs:
       # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
       run: >
         cmake -B ${{ steps.strings.outputs.build-output-dir }}
-        -DCMAKE_CXX_COMPILER=${{ matrix.cxx_compiler }}
-        -DCMAKE_C_COMPILER=${{ matrix.c_compiler }}
         -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
         -DCMAKE_INSTALL_PREFIX=${{ steps.strings.outputs.build-install-dir }}
         -S ${{ github.workspace }}
@@ -138,7 +120,12 @@ jobs:
 
     - name: Format Checks
       working-directory: ${{ steps.strings.outputs.build-output-dir }}
-      run: cmake --build ./ --target format-check
+      # Disable clang-format on Ubuntu as the version of Ubuntu we are targetting
+      # is incompatible with our .clang-format file
+      run: |
+        if [ "${{ runner.os }}" != "Linux" ]; then
+          cmake --build ./ --target format-check
+        fi
 
     - name: Install
       working-directory: ${{ steps.strings.outputs.build-output-dir }}

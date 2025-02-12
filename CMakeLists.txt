@@ -10,6 +10,9 @@ set(PROJECT_AUTHOR "James Bird")
 find_package(Boost)
 find_package(OpenGL)
 find_package(pxr REQUIRED)
+if (UNIX AND NOT APPLE)
+    find_package(X11 REQUIRED)
+endif()
 
 # Set global compile options
 add_compile_definitions(_USE_MATH_DEFINES)
