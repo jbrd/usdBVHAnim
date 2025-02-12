@@ -135,7 +135,6 @@ bool BvhFileFormat::Read(SdfLayer* layer, std::string const& resolvedPath, bool 
     for (size_t jointIndex = 0; jointIndex < document.m_JointNames.size(); ++jointIndex) {
         std::string jointPath = document.m_JointNames[jointIndex];
         int parentIndex = document.m_JointParents[jointIndex];
-        BVHOffset currentOffset = document.m_JointOffsets[jointIndex];
         while (parentIndex != BVHDocument::c_RootParentIndex) {
             jointPath = document.m_JointNames[parentIndex] + "/" + jointPath;
             parentIndex = document.m_JointParents[parentIndex];
