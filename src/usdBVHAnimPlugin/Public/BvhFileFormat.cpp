@@ -20,9 +20,9 @@
 #include "ParseBVH.h"
 #include "Version.h"
 
-PXR_NAMESPACE_USING_DIRECTIVE
+using namespace usdBVHAnimPlugin;
 
-namespace usdBVHAnimPlugin {
+PXR_NAMESPACE_OPEN_SCOPE
 
 //! An SdfFileFormat for BVH animation data, transcoding the BVH data into usdSkel prims.
 class BvhFileFormat : public SdfFileFormat {
@@ -214,5 +214,4 @@ TF_DECLARE_WEAK_AND_REF_PTRS(BvhFileFormat);
 TF_REGISTRY_FUNCTION(TfType)
 {
     SDF_DEFINE_FILE_FORMAT(BvhFileFormat, SdfFileFormat);
-}
-} // namespace usdBVHAnimPlugin
+}PXR_NAMESPACE_CLOSE_SCOPE
