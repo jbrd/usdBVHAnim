@@ -96,6 +96,9 @@ The following options can be specified on the command-line when configuring CMak
    * - ``CLANG_FORMAT``
      - Include Clang Format targets ``[on/off]``
      - ``on``
+   * - ``CXX11_ABI``
+     - On Linux if linking against libstdc++, explicitly turn CXX11_ABI ``[on/off]``. Uses compiler default if empty.
+     - (empty)
    * - ``DOCUMENTATION``
      - Include documentation targets ``[on/off]``
      - ``on``

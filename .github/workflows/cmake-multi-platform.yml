@@ -101,6 +101,7 @@ jobs:
         cmake -B ${{ steps.strings.outputs.build-output-dir }}
         -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
         -DCMAKE_INSTALL_PREFIX=${{ steps.strings.outputs.build-install-dir }}
+        -DCXX11_ABI=off
         -S ${{ github.workspace }}
 
     - name: Build
