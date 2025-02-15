@@ -123,10 +123,8 @@ jobs:
       working-directory: ${{ steps.strings.outputs.build-output-dir }}
       # Disable clang-format on Ubuntu as the version of Ubuntu we are targetting
       # is incompatible with our .clang-format file
-      run: |
-        if [ "${{ runner.os }}" != "Linux" ]; then
-          cmake --build ./ --target format-check
-        fi
+      if: runner.os != 'Linux'
+      run: cmake --build ./ --target format-check
 
     - name: Install
       working-directory: ${{ steps.strings.outputs.build-output-dir }}
