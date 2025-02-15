@@ -13,7 +13,7 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        os: [ubuntu-22.04, windows-2022]
+        os: [macOS-14, ubuntu-22.04, windows-2022]
         build_type: [Release]
         python_version: [3.10.11]  # Has to match the version that was used to build USD
         usd_version: [2411]
