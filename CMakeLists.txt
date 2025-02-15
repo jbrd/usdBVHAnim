@@ -10,6 +10,9 @@ set(PROJECT_AUTHOR "James Bird")
 find_package(Boost)
 find_package(OpenGL)
 find_package(pxr REQUIRED)
+if (UNIX AND NOT APPLE)
+    find_package(X11 REQUIRED)
+endif()
 
 # Set global compile options
 add_compile_definitions(_USE_MATH_DEFINES)
@@ -20,7 +23,7 @@ add_compile_definitions(
     TBB_USE_PERFORMANCE_WARNINGS
 )
 
-if (WIN32)
+if(WIN32)
 	add_compile_options(/wd4003)
 	# Necessary to ensure that MSVC does not optimize away the SdfFileFormat registration callback
 	add_compile_options(/Zc:inline-)
@@ -29,6 +32,8 @@ if (WIN32)
 	add_compile_options(/Zc:strictStrings)
 	add_compile_options(/EHsc)
 	add_compile_options(/DNOMINMAX)
+else()
+	add_compile_options(-Wno-deprecated -Wno-deprecated-declarations -Wno-gnu-zero-variadic-macro-arguments)
 endif()
 
 # Setup common properties accross all targets

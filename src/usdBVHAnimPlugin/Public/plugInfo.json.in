@@ -3,7 +3,7 @@
     {
       "Info": {
         "Types": {
-          "usdBVHAnimPlugin::BvhFileFormat": {
+          "BvhFileFormat": {
             "bases": [
               "SdfFileFormat"
             ],
@@ -17,7 +17,7 @@
           }
         }
       },
-      "LibraryPath": "usdBVHAnimPlugin.dll",
+      "LibraryPath": "$<TARGET_FILE_NAME:usdBVHAnimPlugin_Shared>",
       "Name": "usdBVHAnim",
       "ResourcePath": "./",
       "Root": "./",

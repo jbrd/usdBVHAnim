@@ -20,9 +20,9 @@
 #include "ParseBVH.h"
 #include "Version.h"
 
-PXR_NAMESPACE_USING_DIRECTIVE
+using namespace usdBVHAnimPlugin;
 
-namespace usdBVHAnimPlugin {
+PXR_NAMESPACE_OPEN_SCOPE
 
 //! An SdfFileFormat for BVH animation data, transcoding the BVH data into usdSkel prims.
 class BvhFileFormat : public SdfFileFormat {
@@ -135,7 +135,6 @@ bool BvhFileFormat::Read(SdfLayer* layer, std::string const& resolvedPath, bool 
     for (size_t jointIndex = 0; jointIndex < document.m_JointNames.size(); ++jointIndex) {
         std::string jointPath = document.m_JointNames[jointIndex];
         int parentIndex = document.m_JointParents[jointIndex];
-        BVHOffset currentOffset = document.m_JointOffsets[jointIndex];
         while (parentIndex != BVHDocument::c_RootParentIndex) {
             jointPath = document.m_JointNames[parentIndex] + "/" + jointPath;
             parentIndex = document.m_JointParents[parentIndex];
@@ -215,4 +214,4 @@ TF_REGISTRY_FUNCTION(TfType)
 {
     SDF_DEFINE_FILE_FORMAT(BvhFileFormat, SdfFileFormat);
 }
-} // namespace usdBVHAnimPlugin
+PXR_NAMESPACE_CLOSE_SCOPE

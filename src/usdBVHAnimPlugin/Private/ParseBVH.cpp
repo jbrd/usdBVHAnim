@@ -202,6 +202,8 @@ Parse ParseMotion(Parse cursor, BVHDocument& result)
                     MultiplyBVHQuat(transform.m_RotationQuat, quat);
                     break;
                 }
+                default:
+                    break;
                 };
             }
             result.m_FrameTransforms.push_back(transform);

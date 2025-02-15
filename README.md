@@ -108,12 +108,13 @@ Next, make sure you have the following software installed:
 
 The following options can be specified on the command-line when configuring CMake via the ``-D`` argument:
 
-| Option            | Description                                                                         | Default Value |
-|-------------------|-------------------------------------------------------------------------------------|---------------|
-| ``CLANG_FORMAT``  | Include Clang Format targets ``[on/off]``                                           | ``on``        |
-| ``DOCUMENTATION`` | Include documentation targets ``[on/off]``                                          | ``on``        |
-| ``STRICT``        | Strict compilation (all warnings, warnings as errors) ``[on/off]``                  | ``on``        |
-| ``VALGRIND``      | Additionally run unit tests through Valgrind (if installed, Linux only) ``[on/off]``| ``on``        |
+| Option            | Description                                                                                                | Default Value |
+|-------------------|------------------------------------------------------------------------------------------------------------|---------------|
+| ``CLANG_FORMAT``  | Include Clang Format targets ``[on/off]``                                                                  | ``on``        |
+| ``CXX11_ABI``     | On Linux if linking against libstdc++, explicitly turn CXX11_ABI [on/off]. Uses compiler default if empty. | (empty)       |
+| ``DOCUMENTATION`` | Include documentation targets ``[on/off]``                                                                 | ``on``        |
+| ``STRICT``        | Strict compilation (all warnings, warnings as errors) ``[on/off]``                                         | ``on``        |
+| ``VALGRIND``      | Additionally run unit tests through Valgrind (if installed, Linux only) ``[on/off]``                       | ``on``        |
 
 Contributors are encouraged to install the full set of toolchain requirements, leave all of these turned on by default, such that the entire toolchain is exercised.
 

@@ -1,7 +1,6 @@
 add_component_runtime_library()
-add_custom_command(
-    TARGET usdBVHAnimPlugin_Shared POST_BUILD
-    COMMAND ${CMAKE_COMMAND} ARGS -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/Public/plugInfo.json $<TARGET_FILE_DIR:usdBVHAnimPlugin_Shared>/plugInfo.json
+file(GENERATE OUTPUT $<TARGET_FILE_DIR:usdBVHAnimPlugin_Shared>/plugInfo.json
+     INPUT ${CMAKE_CURRENT_SOURCE_DIR}/Public/plugInfo.json.in
 )
 install(FILES $<TARGET_FILE_DIR:usdBVHAnimPlugin_Shared>/plugInfo.json DESTINATION bin)
 add_test(NAME usdBVHAnimPlugin_USDCat_Test COMMAND usdcat --flatten data/test_bvh.bvh WORKING_DIRECTORY ${PROJECT_SOURCE_DIR})
