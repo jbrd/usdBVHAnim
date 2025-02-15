@@ -60,7 +60,7 @@ functionality for BVH files - writing BVH files is not currently supported.
 
 Also note that currently, the entire file is translated and cached in memory at the time the file is opened. BVH data is not currently lazily loaded (e.g. `SdfAbstractData` is not currently implemented for BVH data).
 
-.. doxygenclass:: usdBVHAnimPlugin::BvhFileFormat
+.. doxygenclass:: BvhFileFormat
    :project: usdBVHAnimPlugin
    :members:
    :no-link:
