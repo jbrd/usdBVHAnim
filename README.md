@@ -104,6 +104,15 @@ Next, make sure you have the following software installed:
 
 ### Build Instructions
 
+#### Cloning The Repository
+
+This project uses an external build system, so when cloning the repository, make sure you also fetch submodules, e.g.
+
+```
+git clone --recurse-submodules https://github.com/jbrd/usdBVHAnim.git
+```
+
+
 #### Build Options
 
 The following options can be specified on the command-line when configuring CMake via the ``-D`` argument:

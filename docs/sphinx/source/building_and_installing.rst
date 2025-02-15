@@ -81,6 +81,16 @@ Windows
 Build Instructions
 ------------------
 
+Cloning The Repository
+^^^^^^^^^^^^^^^^^^^^^^
+
+This project uses an external build system, so when cloning the repository, make sure you also fetch submodules, e.g.
+
+.. code-block::
+
+    git clone --recurse-submodules https://github.com/jbrd/usdBVHAnim.git
+
+
 Build Options
 ^^^^^^^^^^^^^
 
