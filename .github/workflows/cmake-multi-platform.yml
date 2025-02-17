@@ -22,7 +22,6 @@ jobs:
     - uses: actions/checkout@v4
       with:
         submodules: recursive
-        token: ${{ secrets.SUBMODULE_KEY }}
 
     - name: Set up Python ${{ matrix.python_version }}
       uses: actions/setup-python@v5
