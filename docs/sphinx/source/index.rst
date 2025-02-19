@@ -8,6 +8,7 @@ Welcome to |project|'s documentation!
    intro.rst
    usd_structure.rst
    building_and_installing.rst
+   license.rst
 
 
 .. toctree::
