@@ -16,3 +16,4 @@ Welcome to |project|'s documentation!
 
    @COMPONENT_TOCTREE@
 
+..
