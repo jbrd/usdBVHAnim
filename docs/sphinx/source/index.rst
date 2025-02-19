@@ -16,10 +16,3 @@ Welcome to |project|'s documentation!
 
    @COMPONENT_TOCTREE@
 
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
