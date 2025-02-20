@@ -1,5 +1,5 @@
-Welcome to |project|'s documentation!
-=====================================
+|project|
+=========
 
 .. toctree::
    :maxdepth: 2
