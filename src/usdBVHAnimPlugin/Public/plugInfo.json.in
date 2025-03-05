@@ -17,10 +17,10 @@
           }
         }
       },
-      "LibraryPath": "$<TARGET_FILE_NAME:usdBVHAnimPlugin_Shared>",
+      "LibraryPath": "../$<TARGET_FILE_NAME:usdBVHAnimPlugin_Shared>",
       "Name": "usdBVHAnim",
-      "ResourcePath": "./",
-      "Root": "./",
+      "ResourcePath": "resources",
+      "Root": "../",
       "Type": "library"
     }
   ]
