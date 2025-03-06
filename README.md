@@ -1,7 +1,8 @@
 # usdBVHAnim
 
 [![CMake on multiple platforms](https://github.com/jbrd/usdBVHAnim/actions/workflows/cmake-multi-platform.yml/badge.svg)](https://github.com/jbrd/usdBVHAnim/actions/workflows/cmake-multi-platform.yml)
-| **[Changelog](CHANGELOG.md)**
+| **Version: 1.0.1**
+  (**[Changelog](CHANGELOG.md)**)
 | **[Documentation](https://jbrd.github.io/usdBVHAnim/)**
 
 This plug-in enables USD to read BVH animation files.
@@ -57,7 +58,7 @@ First, make sure you are building a version of the plug-in that is compatible wi
 
 | Plugin Version | USD 24.11 | USD 25.02 |
 |----------------|-----------|-----------|
-| 1.0.0          | ✅       | ✅       |
+| 1.0.*          | ✅       | ✅       |
 
 
 ### Toolchain Requirements
