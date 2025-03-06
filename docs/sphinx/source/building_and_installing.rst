@@ -14,7 +14,7 @@ the version of USD you are targetting:
    * - Plugin Version
      - USD 24.11
      - USD 25.02
-   * - 1.0.0
+   * - 1.0.*
      - ✅
      - ✅
 
