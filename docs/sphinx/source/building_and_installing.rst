@@ -155,13 +155,22 @@ Testing Locally
 * Add your local deployment to ``PXR_PLUGINPATH_NAME``, e.g: ``set PXR_PLUGINPATH_NAME=%cd%/deploy/bin`` on Windows 
 * Run ``usdview`` to open a .bvh file
 
-Permanently Installing The Plug-in
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Permanently Installing Into an Existing USD Distro
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-* Specify a permanent location for the plug-in when configuring the build, e.g: ``cmake -DCMAKE_INSTALL_PREFIX=/opt/usd/plugins``
-* Make a build directory and cd into that (e.g. ``mkdir build ; cd build``)
+* Make a build directory and cd into it (e.g. ``mkdir build ; cd build``)
+* Set your install prefix to the path of your USD distro, e.g. ``cmake -DCMAKE_INSTALL_PREFIX=/opt/usd ../``
 * Install with: ``cmake --build ./ --target install --config Release``
-* Ensure your environment always adds your chosen directory's bin folder to ``PXR_PLUGINPATH_NAME``, e.g: ``PXR_PLUGINPATH_NAME=/opt/usd/plugins/bin``
 
+Your USD distro should already be set up to read plugins from its ``plugin/usd`` folder, in which case, no
+further environment setup is required, and the plug-in will be available whenever you use USD.
+
+Permanently Installing Into A Separate Location
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+* Make a build directory and cd into it (e.g. ``mkdir build ; cd build``)
+* Set your install prefix to whatever you like, e.g. ``cmake -DCMAKE_INSTALL_PREFIX=/opt/usdBVHAnim ../``
+* Install with: ``cmake --build ./ --target install --config Release``
+* Ensure your environment always adds your chosen directory's ``plugin/usd`` folder to ``PXR_PLUGINPATH_NAME``, e.g: ``PXR_PLUGINPATH_NAME=/opt/usdBVHAnim/plugin/usd``
 
 At this point, the plug-in should be available whenever you use USD.

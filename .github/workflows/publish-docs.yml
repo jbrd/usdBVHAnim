@@ -75,7 +75,6 @@ jobs:
             echo "${{ github.workspace }}/usd_build/plugin/usd" >> "$GITHUB_PATH"
             echo "${{ github.workspace }}/bin/bin" >> "$GITHUB_PATH"
             echo "${{ github.workspace }}/bin/plugin/usd" >> "$GITHUB_PATH"
-            echo "PXR_PLUGINPATH_NAME=${{ github.workspace }}/bin/plugin/usd;${{ github.workspace }}/usd_build/plugin/usd" >> "$GITHUB_ENV"
           else
             # Concatenate paths for LD_LIBRARY_PATH
             ldLibraryPath="${{ github.workspace }}/usd_build/bin:"
@@ -86,7 +85,6 @@ jobs:
             ldLibraryPath+="${{ github.workspace }}/bin/lib:"
             ldLibraryPath+="${{ github.workspace }}/bin/plugin/usd"
             echo "LD_LIBRARY_PATH=$ldLibraryPath" >> "$GITHUB_ENV"
-            echo "PXR_PLUGINPATH_NAME=${{ github.workspace }}/bin/plugin/usd:${{ github.workspace }}/usd_build/plugin/usd" >> "$GITHUB_ENV"
           fi
           USD_BUILD_PATH="${{ github.workspace }}/usd_build"
           USD_BUILD_PATH="${USD_BUILD_PATH//\\//}"
