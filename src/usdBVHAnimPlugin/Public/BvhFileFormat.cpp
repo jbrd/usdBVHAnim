@@ -61,12 +61,14 @@ public:
 };
 
 enum class BvhError {
-    BVH_FAILED_TO_READ
+    BVH_FAILED_TO_READ,
+    BVH_FAILED_TO_PARSE_SCALE_ARG
 };
 
 TF_REGISTRY_FUNCTION(TfEnum)
 {
     TF_ADD_ENUM_NAME(BvhError::BVH_FAILED_TO_READ, "Failed to read BVH file");
+    TF_ADD_ENUM_NAME(BvhError::BVH_FAILED_TO_PARSE_SCALE_ARG, "Failed to parse scale argument");
 };
 
 TF_DECLARE_PUBLIC_TOKENS(
@@ -103,6 +105,18 @@ bool BvhFileFormat::Read(SdfLayer* layer, std::string const& resolvedPath, bool 
         return false;
     }
 
+    float scale = 1.0f;
+    for (auto const& arg : layer->GetFileFormatArguments()) {
+        if (arg.first == "scale") {
+            try {
+                scale = std::stof(arg.second.c_str());
+            } catch (std::exception const&) {
+                TF_ERROR(BvhError::BVH_FAILED_TO_PARSE_SCALE_ARG, TfEnum::GetDisplayName(BvhError::BVH_FAILED_TO_PARSE_SCALE_ARG));
+                return false;
+            }
+        }
+    }
+
     SdfLayerRefPtr skelLayer = SdfLayer::CreateAnonymous(".usda");
     UsdStageRefPtr skelStage = UsdStage::Open(skelLayer);
     UsdSkelRoot skelRoot = UsdSkelRoot::Define(skelStage, SdfPath("/Root"));
@@ -124,7 +138,7 @@ bool BvhFileFormat::Read(SdfLayer* layer, std::string const& resolvedPath, bool 
 
         auto offset = document.m_JointOffsets[i];
         auto matrix = GfMatrix4d();
-        matrix.SetTranslate(GfVec3d(offset.m_Translation[0], offset.m_Translation[1], offset.m_Translation[2]));
+        matrix.SetTranslate(GfVec3d(offset.m_Translation[0], offset.m_Translation[1], offset.m_Translation[2]) * scale);
 
         bindPoseLS.push_back(matrix);
         bindPoseMS.push_back(matrix * parentMS);
@@ -171,7 +185,7 @@ bool BvhFileFormat::Read(SdfLayer* layer, std::string const& resolvedPath, bool 
             auto const& frame = document.m_FrameTransforms[transformIndex];
             GfRotation frameRotation = GfQuatd(frame.m_RotationQuat[3], frame.m_RotationQuat[0], frame.m_RotationQuat[1], frame.m_RotationQuat[2]);
             auto localTransform = GfMatrix4f();
-            localTransform.SetTransform(frameRotation, GfVec3f(static_cast<float>(frame.m_Translation[0]), static_cast<float>(frame.m_Translation[1]), static_cast<float>(frame.m_Translation[2])));
+            localTransform.SetTransform(frameRotation, GfVec3f(static_cast<float>(frame.m_Translation[0]), static_cast<float>(frame.m_Translation[1]), static_cast<float>(frame.m_Translation[2])) * scale);
             animTranslations.push_back(localTransform.ExtractTranslation());
             animRotations.push_back(localTransform.ExtractRotationQuat());
         }
