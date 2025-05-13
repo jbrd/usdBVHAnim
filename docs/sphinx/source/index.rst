@@ -7,6 +7,7 @@
 
    intro.rst
    usd_structure.rst
+   scaling_animation_data.rst
    building_and_installing.rst
    license.rst
 

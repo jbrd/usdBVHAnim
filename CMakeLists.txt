@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.28)
 include(extern/prefabricated-cmake/main.cmake)
 project(
 	"usdBVHAnim"
-	VERSION "1.0.1"
+	VERSION "1.1.0"
 )
 set(PROJECT_AUTHOR "James Bird")
 
