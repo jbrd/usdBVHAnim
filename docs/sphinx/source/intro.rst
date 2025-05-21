@@ -27,6 +27,9 @@ In practise, here are some example use cases that are made possible by the plug-
 * Use `usdrecord` to render playblasts of BVH motion capture data on the command line
 * Use USD to transcode BVH motion capture data to other file formats
 * Use USD to compose BVH animation into a larger scene composition
+
+  The plug-in supports :doc:`optional scaling of BVH data </scaling_animation_data>` so that it can be scaled to conform to the conventions of the stage.
+
 * Extend a DCC that supports USD (and the usdSkel schema) to import BVH animation data
 * Write your skeletal animation pipeline on top of USD and use this plug-in to ingest BVH data into it
 * Ingest the various open source motion capture data sets delivered in BVH (Ubisoft LAFAN1, etc...) into your USD-based skeletal animation pipeline

@@ -1,0 +1,28 @@
+{
+   Sdf_IdentityRegistry Singleton
+   Memcheck:Leak
+   match-leak-kinds: definite
+   fun:_Znwm
+   fun:*Sdf_IdentityRegistry8Identify*
+   ...
+}
+{
+   sdf\ParserHelpers.cpp _MakeFactoryMap Static Data
+   Memcheck:Leak
+   match-leak-kinds: possible
+   fun:_Znwm
+   fun:*Sdf_ParserHelpers23MakeShapedValueTemplate*
+   ...
+}
+{
+   pthread tls
+   Memcheck:Leak
+   match-leak-kinds: possible
+   fun:calloc
+   fun:calloc
+   fun:allocate_dtv
+   fun:_dl_allocate_tls
+   fun:allocate_stack
+   fun:pthread_create*
+   ...
+}

@@ -1,7 +1,7 @@
 # usdBVHAnim
 
 [![CMake on multiple platforms](https://github.com/jbrd/usdBVHAnim/actions/workflows/cmake-multi-platform.yml/badge.svg)](https://github.com/jbrd/usdBVHAnim/actions/workflows/cmake-multi-platform.yml)
-| **Version: 1.0.1**
+| **Version: 1.1.0**
   (**[Changelog](CHANGELOG.md)**)
 | **[Documentation](https://jbrd.github.io/usdBVHAnim/)**
 
@@ -24,6 +24,7 @@ over "AnimationData"
 }
 ```
 
+
 ## Example Use Cases
 
 Here are some example use cases that are made possible by the plug-in:
@@ -34,7 +35,9 @@ Here are some example use cases that are made possible by the plug-in:
 
 💡Use USD to transcode BVH motion capture data to other file formats
 
-💡Use USD to compose BVH animation into a larger scene composition
+💡Use USD to compose BVH animation into a larger scene composition.
+
+The plug-in supports optional scaling of BVH data so that it can be scaled to conform to the conventions of the stage.
 
 💡Extend a DCC that supports USD (and the usdSkel schema) to import BVH animation data
 

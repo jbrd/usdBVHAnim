@@ -5,7 +5,7 @@ Overview
 --------
 
 Since a BVH animation file only contains skeletal animation data, the plug-in will translate
-a BVH file into a hierarchy of the following prims from the `usdSkel` schema:
+a BVH file into a hierarchy of the following prims from the ``usdSkel`` schema:
 
 * A ``SkelRoot`` prim containing:
 
@@ -25,6 +25,14 @@ The plug-in uses the timing information in the BVH file to set the ``timeCodesPe
 The plug-in deliberately does not set ``framesPerSecond`` on the root layer, as it is the responsibility of the consumer
 of animation content to specify the desired playback frame rate, and not the responsibility of the content itself
 to dictate this.
+
+
+
+A Note About metersPerUnit Metadata
+-----------------------------------
+
+Since BVH data is unitless, the plug-in cannot emit ``metersPerUnit`` layer metadata. But the plug-in does provide a
+means of scaling animation data for cases where it doesn't conform to the conventions of the stage. See :doc:`scaling_animation_data`.
 
 
 
