@@ -59,9 +59,10 @@ Ubisoft LAFAN1 dataset to its sample model, visualised in usdview.
 
 First, make sure you are building a version of the plug-in that is compatible with the version of USD you are targetting:
 
-| Plugin Version | USD 24.11 | USD 25.02 | USD 25.05 |
-|----------------|-----------|-----------|-----------|
-| 1.0.*          | ✅       | ✅       | ✅       |
+| Plugin Version | USD 24.11 | USD 25.02 | USD 25.05 | USD 25.08 |
+|----------------|-----------|-----------|-----------|-----------|
+| 1.1.*          | ✅       | ✅       | ✅       | ✅       |
+| 1.0.*          | ✅       | ✅       | ✅       |         |
 
 
 ### Toolchain Requirements
