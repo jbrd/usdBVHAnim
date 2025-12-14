@@ -12,7 +12,7 @@
 
 static const char* const c_WS = " \t\r\n";
 static const char* const c_AlphaNumeric = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-static const char* const c_Double = "-0123456789.";
+static const char* const c_Double = "+-0123456789.eE";
 
 static void MultiplyBVHQuat(double a[4], double const b[4])
 {
