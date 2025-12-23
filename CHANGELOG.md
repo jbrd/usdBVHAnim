@@ -1,5 +1,11 @@
 # usdBVHAnim Changelog
 
+## Version 1.1.1
+
+* Verified on USD 25.11
+* Support exponent (e.g. `1e-4`) in double values in BVH
+* Fix animated translation offsets
+
 ## Version 1.1.0
 
 * Added a file format argument to scale BVH animation data at import time. This can be authored by
