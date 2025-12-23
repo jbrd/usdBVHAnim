@@ -1,7 +1,7 @@
 # usdBVHAnim
 
 [![CMake on multiple platforms](https://github.com/jbrd/usdBVHAnim/actions/workflows/cmake-multi-platform.yml/badge.svg)](https://github.com/jbrd/usdBVHAnim/actions/workflows/cmake-multi-platform.yml)
-| **Version: 1.1.0**
+| **Version: 1.1.1**
   (**[Changelog](CHANGELOG.md)**)
 | **[Documentation](https://jbrd.github.io/usdBVHAnim/)**
 

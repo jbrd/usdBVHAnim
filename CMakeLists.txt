@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.28)
 include(extern/prefabricated-cmake/main.cmake)
 project(
 	"usdBVHAnim"
-	VERSION "1.1.0"
+	VERSION "1.1.1"
 )
 set(PROJECT_AUTHOR "James Bird")
 set(VALGRIND_ARGS --suppressions=${PROJECT_SOURCE_DIR}/valgrind.supp)
