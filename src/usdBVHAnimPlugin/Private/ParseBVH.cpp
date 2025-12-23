@@ -179,13 +179,13 @@ Parse ParseMotion(Parse cursor, BVHDocument& result)
                 BVHChannel channel = channels & BVHChannel::BitMask;
                 switch (channel) {
                 case BVHChannel::XPosition:
-                    transform.m_Translation[0] += value;
+                    transform.m_Translation[0] = value;
                     break;
                 case BVHChannel::YPosition:
-                    transform.m_Translation[1] += value;
+                    transform.m_Translation[1] = value;
                     break;
                 case BVHChannel::ZPosition:
-                    transform.m_Translation[2] += value;
+                    transform.m_Translation[2] = value;
                     break;
                 case BVHChannel::XRotation: {
                     double quat[4] = { std::sin(value * 0.5 * c_DegToRad), 0.0f, 0.0f, std::cos(value * 0.5 * c_DegToRad) };
