@@ -8,30 +8,15 @@ First, make sure you are building a version of the plug-in that is compatible wi
 the version of USD you are targetting:
 
 .. list-table::
-   :widths: 25 25 25 25 25 25 25
+   :widths: 25 25
    :header-rows: 1
 
    * - Plugin Version
-     - USD 24.11
-     - USD 25.02
-     - USD 25.05
-     - USD 25.08
-     - USD 25.11
-     - USD 26.03
+     - Compatible USD Versions
    * - 1.1.*
-     - ✅
-     - ✅
-     - ✅
-     - ✅
-     - ✅
-     - ✅
+     - ✅ 24.11 to 26.05
    * - 1.0.*
-     - ✅
-     - ✅
-     - ✅
-     - 
-     - 
-     - 
+     - ✅ 24.11 to 25.05
 
 
 Toolchain Requirements
