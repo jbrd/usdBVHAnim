@@ -1,0 +1,60 @@
+name: Check OpenUSD upstream releases
+
+on:
+  schedule:
+    - cron: '0 0 * * 1'
+  workflow_dispatch:
+
+jobs:
+  check-openusd-release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v7
+        env:
+          OPENUSD_REPO: PixarAnimationStudios/OpenUSD
+          ISSUE_TITLE_PREFIX: Update OpenUSD to
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const upstreamRepo = process.env.OPENUSD_REPO;
+            const titlePrefix = process.env.ISSUE_TITLE_PREFIX || 'Update OpenUSD to';
+            if (!upstreamRepo || !/^.+\/.+$/.test(upstreamRepo.trim())) {
+              throw new Error(`OPENUSD_REPO must be set as owner/repo, got: '${upstreamRepo}'`);
+            }
+            const [upstreamOwner, upstreamRepoName] = upstreamRepo.trim().split('/');
+            const release = await github.rest.repos.getLatestRelease({
+              owner: upstreamOwner,
+              repo: upstreamRepoName,
+            });
+            const tag = release.data.tag_name;
+            const issueTitle = `${titlePrefix} ${tag}`;
+            const openIssues = await github.paginate(github.rest.issues.listForRepo, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              per_page: 100,
+            });
+            const existingIssue = openIssues.find((issue) => {
+              return issue.title === issueTitle ||
+                     issue.title.includes(tag) ||
+                     issue.title.toLowerCase().includes('update openusd');
+            });
+            if (existingIssue) {
+              core.info(`Skipped creating issue; an open issue already exists (#${existingIssue.number}): ${existingIssue.title}`);
+              return;
+            }
+            const body = [
+              `The upstream OpenUSD repository (${upstreamRepo}) has published a new release: **${tag}**.`,
+              '',
+              `- Release: ${release.data.html_url}`,
+              '',
+              'Please update this repository to target the new OpenUSD version.',
+            ].join('\n');
+            const newIssue = await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: issueTitle,
+              body,
+            });
+            core.info(`Created issue #${newIssue.data.number}`);
+            return newIssue.data.html_url;
