@@ -14,7 +14,7 @@ the version of USD you are targetting:
    * - Plugin Version
      - Compatible USD Versions
    * - 1.1.*
-     - ✅ 24.11 to 26.05
+     - ✅ 24.11 to 26.08
    * - 1.0.*
      - ✅ 24.11 to 25.05
 
