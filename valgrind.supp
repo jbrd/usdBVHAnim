@@ -26,3 +26,9 @@
    fun:pthread_create*
    ...
 }
+{
+   oneTBB scalable_free header probe when releasing the ArResolver per-thread cache
+   Memcheck:Cond
+   fun:scalable_free
+   fun:_ZNSt23_Sp_counted_ptr_inplaceIN*pxrReserved__*_DispatchingResolver6_CacheE*_M_disposeEv
+}
