@@ -18,5 +18,8 @@ set_property(TEST usdBVHAnimPlugin_USDCat_Test PROPERTY ENVIRONMENT "PXR_PLUGINP
 set_property(TEST usdBVHAnimPlugin_USDCat_Scale_Test PROPERTY ENVIRONMENT "PXR_PLUGINPATH_NAME=$<TARGET_FILE_DIR:usdBVHAnimPlugin_Shared>")
 
 if(${VALGRIND} AND VALGRIND_PATH)
-     set_property(TEST usdBVHAnimPlugin_Shared_Tests_memcheck PROPERTY ENVIRONMENT "PXR_PLUGINPATH_NAME=$<TARGET_FILE_DIR:usdBVHAnimPlugin_Shared>")
+     set_property(TEST usdBVHAnimPlugin_Shared_Tests_memcheck PROPERTY ENVIRONMENT
+          "PXR_PLUGINPATH_NAME=$<TARGET_FILE_DIR:usdBVHAnimPlugin_Shared>"
+          "WORK_SYNCHRONIZE_ASYNC_DESTROY_CALLS=1"
+     )
 endif()
